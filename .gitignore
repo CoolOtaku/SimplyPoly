@@ -1,0 +1,14 @@
+# Docker
+*.log
+*.pid
+.env
+.vscode/
+.idea/
+
+# WordPress volumes
+/mysql_data/
+/wordpress_data/
+
+# OS junk
+.DS_Store
+Thumbs.db
