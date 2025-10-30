@@ -1,0 +1,2 @@
+msgid "🌐 Перекласти"
+msgstr "🌐 Translate"

@@ -9,6 +9,9 @@
 /mysql_data/
 /wordpress_data/
 
+# Plugin .env file
+/simply-poly/.env
+
 # OS junk
 .DS_Store
 Thumbs.db
