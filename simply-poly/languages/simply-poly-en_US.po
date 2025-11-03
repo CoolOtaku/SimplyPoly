@@ -1,2 +1,2 @@
-msgid "🌐 Перекласти"
-msgstr "🌐 Translate"
+msgid "Перекласти"
+msgstr "Translate"

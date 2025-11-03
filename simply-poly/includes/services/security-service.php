@@ -68,7 +68,6 @@ class SecurityService
             if (!hash_equals($expected_sig, $sig)) return false;
             if (is_user_logged_in() && get_current_user_id() != $data_array['uid']) return false;
             if ($this->SECRET_KEY != $data_array['secret_key']) return false;
-            if (!Helper::isIpAllowed(Helper::getUserIp())) return false;
 
             return true;
         } catch (Exception $e) {

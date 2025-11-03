@@ -12,7 +12,9 @@ namespace SimplyPoly;
 
 use Throwable;
 
+use SimplyPoly\Helper;
 use SimplyPoly\Controllers\EditorPageController;
+use SimplyPoly\Controllers\AdminPageController;
 
 if (!defined('ABSPATH')) exit;
 
@@ -29,6 +31,9 @@ class SimplyPolyPlugin
 
     public function init(): void
     {
+        include_once SIMPLY_POLY_PATH . 'helper.php';
+        Helper::init();
+
         add_action('plugins_loaded', function() {
             load_plugin_textdomain('simply-poly', false, dirname(plugin_basename(__FILE__)) . '/languages/');
         });
@@ -51,6 +56,7 @@ class SimplyPolyPlugin
         Dotenv::loadEnvFile(SIMPLY_POLY_PATH . '.env');
 
         new EditorPageController();
+        new AdminPageController();
     }
 
     private function importFile(string $path): void
