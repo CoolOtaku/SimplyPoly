@@ -1,0 +1,100 @@
+/* All */
+:root {
+    --primary-color: #3498db;
+    --accent-color: #73C8D2;
+    --doby-bg-color: #1e1e1e;
+    --widget-bg-color: #2d2d2d;
+    --wrapper-bg-color: #202020;
+    --text-color: white;
+    --text-font-size: 16px;
+    --button-font-size: 16px;
+}
+
+html {
+    margin-top: 0 !important;
+}
+
+body.simplypoly-editor {
+    background: var(--doby-bg-color) !important;
+    color: var(--text-color) !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+    display: flex !important;
+    height: 100vh !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.simplypoly-editor button {
+    background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+    font-size: var(--button-font-size) !important;
+    color: var(--button-font-size) !important;
+    transition: all 0.3s ease !important;
+    border-radius: 4px !important;
+    padding: 6px 12px !important;
+    cursor: pointer !important;
+    border: none !important;
+}
+
+.simplypoly-editor button:hover {
+    box-shadow: 0 0 15px var(--primary-color) !important;
+}
+
+.zoom-cursor {
+    cursor: zoom-in !important;
+}
+
+.zoom-cursor-out {
+    cursor: zoom-out !important;
+}
+
+/* ToolBar */
+.editor-toolbar {
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2) !important;
+    background: var(--widget-bg-color) !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 0 15px !important;
+    display: flex !important;
+    height: 10vh !important;
+}
+
+.editor-toolbar .logo {
+    object-fit: contain !important;
+    height: 6vh !important;
+}
+
+.editor-iframe-wrapper {
+    background: var(--wrapper-bg-color) !important;
+    justify-content: center !important;
+    align-items: center !important;
+    overflow: auto !important;
+    display: flex !important;
+    flex: 1 !important;
+}
+
+.editor-iframe {
+    transition: opacity 0.6s ease, transform 0.3s ease !important;
+    transform: scale(var(--zoom, 1)) translateY(10px) !important;
+    transform-origin: top center !important;
+    border: none !important;
+    height: 90% !important;
+    width: 80% !important;
+    opacity: 0 !important;
+}
+
+.editor-iframe.loaded {
+    transform: scale(var(--zoom, 1)) translateY(0) !important;
+    opacity: 1 !important;
+}
+
+.zoom-controls {
+    background: var(--widget-bg-color) !important;
+    border-radius: 8px !important;
+    position: fixed !important;
+    display: flex !important;
+    padding: 8px !important;
+    bottom: 20px !important;
+    right: 20px !important;
+    gap: 6px !important;
+}

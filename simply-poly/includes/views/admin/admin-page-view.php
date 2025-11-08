@@ -48,7 +48,7 @@ class AdminPageView extends AbstractView
 
         wp_enqueue_style('select2', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css');
         wp_enqueue_script('select2', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js', ['jquery']);
-        wp_enqueue_script('simply-poly-admin-script', SIMPLY_POLY_URL . 'assets/js/admin-scripts.js', [], null, true);
+        wp_enqueue_script('simply-poly-admin', SIMPLY_POLY_URL . 'assets/js/admin.js', [], null, true);
 
         return true;
     }
