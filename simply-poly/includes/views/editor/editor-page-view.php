@@ -41,8 +41,8 @@ class EditorPageView extends AbstractView
         </div>
 
         <div class="editor-iframe-wrapper">
-            <iframe id="editor-frame" sandbox="allow-scripts allow-same-origin"
-                    class="editor-iframe" src="<?php echo esc_url($preview_url); ?>">
+            <iframe id="editor-frame" sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-top-navigation-by-user-activation"
+                    class="editor-iframe" src="<?php echo esc_url($preview_url); ?>" data-css="<?php echo esc_url(SIMPLY_POLY_URL . 'assets/css/editor-frame-view.css'); ?>">
             </iframe>
         </div>
 

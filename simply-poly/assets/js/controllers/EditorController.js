@@ -15,10 +15,6 @@ export default class EditorController {
         this.view.onZoomIn = () => this.zoomIn();
         this.view.onZoomOut = () => this.zoomOut();
 
-        this.view.onIframeLoaded = () => {
-            console.log('Iframe loaded and ready.');
-        };
-
         this.view.init();
 
         document.getElementById('zoom-in').addEventListener('click', () => this.zoomIn());

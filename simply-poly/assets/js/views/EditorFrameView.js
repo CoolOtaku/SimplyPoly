@@ -1,29 +1,51 @@
 export default class EditorFrameView {
     constructor(selector) {
         this.frame = document.querySelector(selector);
+        this.iframeDoc = null;
         this.onZoomChange = null;
         this.onZoomIn = null;
         this.onZoomOut = null;
-        this.onIframeLoaded = null;
     }
 
     init() {
         if (!this.frame) {
-            console.error('Editor iframe not found');
+            console.error('❌ Editor iframe not found');
             return;
         }
 
-        this.frame.addEventListener('load', () => this.onLoad());
+        this.frame.addEventListener('load', () => this.onWait());
+    }
+
+    onWait(attempt = 0) {
+        try {
+            const doc = this.frame.contentDocument || this.frame.contentWindow.document;
+            if (doc && doc.readyState === 'complete' && doc.body) {
+                this.iframeDoc = doc;
+                this.onLoad();
+                return;
+            }
+        } catch (e) {
+            console.warn('⚠️ Iframe not accessible yet...');
+        }
+
+        if (attempt < 50) setTimeout(() => this.onWait(attempt + 1), 100);
+        else console.error('❌ Iframe never became ready!');
     }
 
     onLoad() {
-        const iframeDoc = this.frame.contentDocument || this.frame.contentWindow.document;
+        console.log('✅ Iframe fully ready');
 
-        const style = iframeDoc.createElement('style');
-        style.textContent = '#wpadminbar { display: none !important; }';
-        iframeDoc.head.appendChild(style);
+        const cssUrl = this.frame.dataset.css;
+        if (cssUrl) {
+            const link = this.iframeDoc.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = cssUrl;
+            this.iframeDoc.head.appendChild(link);
+        }
 
-        iframeDoc.addEventListener('wheel', (e) => {
+        this.enableHoverEditable();
+
+        this.iframeDoc.addEventListener('wheel', (e) => {
             if (e.ctrlKey) {
                 e.preventDefault();
                 if (e.deltaY < 0) {
@@ -36,8 +58,6 @@ export default class EditorFrameView {
         }, { passive: false });
 
         this.frame.classList.add('loaded');
-
-        if (this.onIframeLoaded) this.onIframeLoaded();
     }
 
     setZoom(zoom) {
@@ -47,5 +67,34 @@ export default class EditorFrameView {
         else this.frame.classList.remove('zoom-cursor');
 
         if (this.onZoomChange) this.onZoomChange(zoom);
+    }
+
+    enableHoverEditable() {
+        if (!this.iframeDoc) {
+            console.warn('❌ Iframe document not ready yet');
+            return;
+        }
+
+        let lastHovered = null;
+
+        this.iframeDoc.addEventListener('mouseover', (e) => {
+            const target = e.target;
+
+            if (lastHovered && lastHovered !== target) lastHovered.classList.remove('simplypoly-editable-hover');
+
+            const tag = target.tagName.toLowerCase();
+            const editableTags = ['p', 'span', 'strong', 'em', 'a', 'img', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
+
+            const hasText = target.childNodes.length === 1 && target.childNodes[0].nodeType === Node.TEXT_NODE && target.textContent.trim().length > 0;
+
+            if (editableTags.includes(tag) || hasText) {
+                target.classList.add('simplypoly-editable-hover');
+                lastHovered = target;
+            }
+        });
+
+        this.iframeDoc.addEventListener('mouseout', (e) => {
+            if (e.target.classList.contains('simplypoly-editable-hover')) e.target.classList.remove('simplypoly-editable-hover');
+        });
     }
 }
