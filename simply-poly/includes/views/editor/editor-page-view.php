@@ -11,10 +11,10 @@ class EditorPageView extends AbstractView
     #[NoReturn]
     public function render($attrs): string
     {
-        if (!current_user_can('edit_pages')) wp_die(__('Доступ заборонено!', 'simply-poly'));
+        if (!current_user_can('edit_pages')) wp_die(__('Access denied!', 'simply-poly'));
 
         $post = isset($_GET['post']) ? intval($_GET['post']) : 0;
-        if (!$post) wp_die(__('Немає ідентифікатора публікації!', 'simply-poly'));
+        if (!$post) wp_die(__('No post ID provided!', 'simply-poly'));
 
         $preview_url = get_permalink($post) . '?simplypoly_preview=1';
         ?>
@@ -23,7 +23,7 @@ class EditorPageView extends AbstractView
         <html <?php language_attributes(); ?>>
         <head>
             <meta charset="<?php bloginfo('charset'); ?>">
-            <title>SimplyPoly Editor</title>
+            <title><?php echo __('SimplyPoly Editor', 'simply-poly'); ?></title>
 
             <?php
             remove_action('wp_footer', 'wp_admin_bar_render', 1000);
@@ -35,8 +35,8 @@ class EditorPageView extends AbstractView
         <div class="editor-toolbar">
             <img class="logo" src="<?php echo esc_url(SIMPLY_POLY_URL . 'assets/img/logo.png'); ?>" alt="Logo"/>
             <div class="controls">
-                <button onclick="location.reload()">🔄 Оновити</button>
-                <button onclick="window.location='<?php echo admin_url('edit.php?post_type=page'); ?>'">↩ Вийти</button>
+                <button onclick="location.reload()">🔄 <?php echo __('Refresh', 'simply-poly'); ?></button>
+                <button onclick="window.location='<?php echo admin_url('edit.php?post_type=page'); ?>'">↩ <?php echo __('Exit', 'simply-poly'); ?></button>
             </div>
         </div>
 

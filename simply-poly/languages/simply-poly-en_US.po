@@ -1,2 +1,0 @@
-msgid "Перекласти"
-msgstr "Translate"

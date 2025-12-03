@@ -26,7 +26,7 @@ class AdminPageView extends AbstractView
                 ?>
                 <table class="form-table">
                     <tr valign="top">
-                        <th scope="row"><?php echo esc_html(__('🌐 Мови для перекладу', 'simply-poly')); ?></th>
+                        <th scope="row"><?php echo esc_html('🌐 ' . __('Languages for translation', 'simply-poly')); ?></th>
                         <td>
                             <select id="language-select" name="<?php echo esc_attr(Helper::LANGUAGES); ?>[]" multiple size="5" style="min-width:250px;">
                                 <?php foreach (Helper::$ALL_LANGUAGES as $key => $label): ?>
@@ -36,7 +36,7 @@ class AdminPageView extends AbstractView
                                 <?php endforeach; ?>
                             </select>
                             
-                            <p class="description"><?php echo esc_html(__('Виберіть одну або кілька мов для перекладу (Ctrl/Command + click)', 'simply-poly')); ?></p>
+                            <p class="description"><?php echo esc_html(__('Select one or more languages for translation (Ctrl/Command + click)', 'simply-poly')); ?></p>
                         </td>
                     </tr>
                 </table>

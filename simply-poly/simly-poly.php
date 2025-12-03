@@ -3,6 +3,8 @@
 /*
 Plugin Name: SimplyPoly
 Description: A lightweight multilingual plugin for WordPress that manages translations inside a single page using a visual translation builder.
+Text Domain: simply-poly
+Domain Path: /languages
 Version: 1.0
 Author: CoolOtaku
 License: GNU General Public License
@@ -33,10 +35,6 @@ class SimplyPolyPlugin
     {
         include_once SIMPLY_POLY_PATH . 'helper.php';
         Helper::init();
-
-        add_action('plugins_loaded', function() {
-            load_plugin_textdomain('simply-poly', false, dirname(plugin_basename(__FILE__)) . '/languages/');
-        });
 
         $this->importFile('*.php');
         $this->importFile('assets/*.php');

@@ -36,7 +36,7 @@ class EditorPageController extends AbstractController
             $actions['simplypoly_translate'] = sprintf(
                 '<a href="%s" style="font-weight: 700 !important;">%s</a>',
                 esc_url($url),
-                __('🌐 Перекласти', 'simply-poly')
+                '🌐 ' . __('Translate', 'simply-poly')
             );
         }
 
