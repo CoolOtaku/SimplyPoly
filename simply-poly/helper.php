@@ -7,6 +7,7 @@ if (!defined('ABSPATH')) exit;
 class Helper
 {
     public const PLUGIN_NAME = 'SimplyPoly';
+    public const PLUGIN_DOMAIN = 'simply-poly';
     
     public const LANGUAGES_GROUP = 'simplypoly_languages_group';
     public const LANGUAGES = 'simplypoly_languages';

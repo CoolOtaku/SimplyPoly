@@ -30,13 +30,13 @@ class EditorPageController extends AbstractController
 
     public function addButton($actions, $post)
     {
-        if ($post->post_type === 'page') {
+        if ($post->post_type === 'page' && $post->post_status !== 'trash') {
             $url = admin_url('post.php?post=' . $post->ID . '&action=simplypoly');
             
             $actions['simplypoly_translate'] = sprintf(
-                '<a href="%s" style="font-weight: 700 !important;">%s</a>',
+                '<a href="%s"><b>%s</b></a>',
                 esc_url($url),
-                '🌐 ' . __('Translate', 'simply-poly')
+                '🌐 ' . __('Translate', Helper::PLUGIN_DOMAIN)
             );
         }
 

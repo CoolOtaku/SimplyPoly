@@ -1,3 +1,5 @@
+import Helper from '../helper.js';
+
 export default class EditorFrameView {
     constructor(selector) {
         this.frame = document.querySelector(selector);
@@ -76,16 +78,21 @@ export default class EditorFrameView {
         }
 
         let lastHovered = null;
+        const editableTags = [
+            'p', 'span', 'strong', 'em', 'a',
+            'h1', 'h2', 'h3', 'h4', 'h5', 'h6'
+        ];
 
+        // HOVER
         this.iframeDoc.addEventListener('mouseover', (e) => {
             const target = e.target;
 
             if (lastHovered && lastHovered !== target) lastHovered.classList.remove('simplypoly-editable-hover');
 
             const tag = target.tagName.toLowerCase();
-            const editableTags = ['p', 'span', 'strong', 'em', 'a', 'img', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
-
-            const hasText = target.childNodes.length === 1 && target.childNodes[0].nodeType === Node.TEXT_NODE && target.textContent.trim().length > 0;
+            const hasText = target.childNodes.length === 1 &&
+                target.childNodes[0].nodeType === Node.TEXT_NODE &&
+                target.textContent.trim().length > 0;
 
             if (editableTags.includes(tag) || hasText) {
                 target.classList.add('simplypoly-editable-hover');
@@ -94,7 +101,31 @@ export default class EditorFrameView {
         });
 
         this.iframeDoc.addEventListener('mouseout', (e) => {
-            if (e.target.classList.contains('simplypoly-editable-hover')) e.target.classList.remove('simplypoly-editable-hover');
+            if (e.target === lastHovered) {
+                e.target.classList.remove('simplypoly-editable-hover');
+                lastHovered = null;
+            }
+        });
+
+        // CLICK
+        this.iframeDoc.addEventListener('click', (e) => {
+            const target = e.target;
+
+            if (!target.classList.contains('simplypoly-editable-hover')) return;
+            
+            e.preventDefault();
+            e.stopPropagation();
+
+            const payload = {
+                tag: target.tagName.toLowerCase(),
+                text: target.innerText || '',
+                html: target.innerHTML,
+                isImage: target.tagName.toLowerCase() === 'img',
+                src: target.tagName.toLowerCase() === 'img' ? target.src : null,
+                path: Helper.getDomPath(target)
+            };
+
+            document.dispatchEvent(new CustomEvent('simplypoly:element:selected', { detail: payload }));
         });
     }
 }

@@ -1,10 +1,12 @@
-import EditorFrameView from '../views/EditorFrameView.js';
 import EditorState from '../models/EditorState.js';
+import EditorFrameView from '../views/EditorFrameView.js';
+import TranslationPanelView from '../views/TranslationPanelView.js';
 
 export default class EditorController {
     constructor() {
         this.state = new EditorState();
         this.view = new EditorFrameView('#editor-frame');
+        this.translationPanel = new TranslationPanelView('#simplypoly-panel');
     }
 
     init() {
@@ -17,6 +19,7 @@ export default class EditorController {
 
         this.view.init();
 
+        document.addEventListener('simplypoly:element:selected', (e) => this.translationPanel.show(e.detail, params.langs));
         document.getElementById('zoom-in').addEventListener('click', () => this.zoomIn());
         document.getElementById('zoom-out').addEventListener('click', () => this.zoomOut());
     }

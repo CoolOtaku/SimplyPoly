@@ -53,6 +53,7 @@ body.simplypoly-editor {
     margin: 0 !important;
 }
 
+/* buttons */
 .simplypoly-editor button {
     background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
     font-size: var(--button-font-size) !important;
@@ -68,15 +69,7 @@ body.simplypoly-editor {
     box-shadow: 0 0 15px var(--primary-color) !important;
 }
 
-.zoom-cursor {
-    cursor: zoom-in !important;
-}
-
-.zoom-cursor-out {
-    cursor: zoom-out !important;
-}
-
-/* ToolBar */
+/* TOOL BAR */
 .editor-toolbar {
     box-shadow: 0 2px 6px rgba(0,0,0,0.2) !important;
     background: var(--widget-bg-color) !important;
@@ -92,6 +85,7 @@ body.simplypoly-editor {
     height: 6vh !important;
 }
 
+/* EDITOR IFRAME */
 .editor-iframe-wrapper {
     background: var(--wrapper-bg-color) !important;
     justify-content: center !important;
@@ -116,6 +110,7 @@ body.simplypoly-editor {
     opacity: 1 !important;
 }
 
+/* ZOOM CONTROLS */
 .zoom-controls {
     background: var(--widget-bg-color) !important;
     border-radius: 8px !important;
@@ -125,4 +120,43 @@ body.simplypoly-editor {
     bottom: 20px !important;
     right: 20px !important;
     gap: 6px !important;
+}
+
+.zoom-cursor {
+    cursor: zoom-in !important;
+}
+
+.zoom-cursor-out {
+    cursor: zoom-out !important;
+}
+
+/* TRANSLATION PANEL */
+.simplypoly-panel {
+    position: fixed !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 360px !important;
+    height: 100vh !important;
+    background: #111 !important;
+    color: #fff !important;
+    z-index: 9999 !important;
+    padding: 16px !important;
+    overflow-y: auto !important;
+    transition: transform .25s ease !important;
+}
+
+.simplypoly-panel.hidden {
+    transform: translateX(-100%) !important;
+}
+
+.simplypoly-lang {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    margin-bottom: 10px !important;
+}
+
+.simplypoly-lang textarea {
+    width: 100% !important;
+    min-height: 80px !important;
 }

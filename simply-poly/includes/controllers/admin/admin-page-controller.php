@@ -27,7 +27,7 @@ class AdminPageController extends AbstractController
     public function post($attrs = null): bool
     {
         add_menu_page(
-            '⚙ ' . __('SimplyPoly Settings', 'simply-poly'),
+            '⚙ ' . __('SimplyPoly Settings', Helper::PLUGIN_DOMAIN),
             esc_html(Helper::PLUGIN_NAME),
             'manage_options',
             'simply-poly-main',
