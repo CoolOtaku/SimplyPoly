@@ -39,8 +39,15 @@ class EditorPageView extends AbstractView
             <div class="editor-toolbar">
                 <img class="logo" src="<?php echo esc_url(SIMPLY_POLY_URL . 'assets/img/logo.png'); ?>" alt="Logo" />
                 <div class="controls">
-                    <button onclick="location.reload()">🔄 <?php echo esc_html__('Refresh', Helper::PLUGIN_DOMAIN); ?></button>
-                    <button onclick="window.location='<?php echo admin_url('edit.php?post_type=page'); ?>'">↩ <?php echo esc_html__('Exit', Helper::PLUGIN_DOMAIN); ?></button>
+                    <button class="save" onclick="">
+                        💾 <?php echo esc_html__('Save', Helper::PLUGIN_DOMAIN); ?>
+                    </button>
+                    <button onclick="location.reload()">
+                        🗘 <?php echo esc_html__('Refresh', Helper::PLUGIN_DOMAIN); ?>
+                    </button>
+                    <button class="exit" onclick="window.location='<?php echo admin_url('edit.php?post_type=page'); ?>'">
+                        ❌ <?php echo esc_html__('Exit', Helper::PLUGIN_DOMAIN); ?>
+                    </button>
                 </div>
             </div>
 

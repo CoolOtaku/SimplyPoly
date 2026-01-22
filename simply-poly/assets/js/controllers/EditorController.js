@@ -1,12 +1,16 @@
 import EditorState from '../models/EditorState.js';
 import EditorFrameView from '../views/EditorFrameView.js';
 import TranslationPanelView from '../views/TranslationPanelView.js';
+import TranslationService from '../services/TranslationService.js';
 
 export default class EditorController {
     constructor() {
         this.state = new EditorState();
         this.view = new EditorFrameView('#editor-frame');
+
         this.translationPanel = new TranslationPanelView('#simplypoly-panel');
+        
+        this.translationService = new TranslationService();
     }
 
     init() {
