@@ -8,14 +8,14 @@ export default class TranslationPanelView {
         this.handleOutsideClick = this.handleOutsideClick.bind(this);
     }
 
-    show(payload, languages) {
+    show(payload, languages, translations) {
         if (!this.el) return;
 
         this.el.classList.remove('hidden');
         this.isOpen = true;
 
         this.renderSource(payload);
-        this.renderLanguages(payload, languages);
+        this.renderLanguages(payload, languages, translations);
 
         setTimeout(() => {
             document.addEventListener('click', this.handleOutsideClick);
@@ -36,7 +36,6 @@ export default class TranslationPanelView {
         this.hide();
     }
 
-    // RENDER PARTS
     renderSource(payload) {
         this.sourceEl.innerHTML = `
             <div class="simplypoly-original">
@@ -45,21 +44,31 @@ export default class TranslationPanelView {
         `;
     }
 
-    renderLanguages(payload, languages) {
+    renderLanguages(payload, languages, translations) {
         this.langsEl.innerHTML = '';
+
+        const existing = translations[payload.path] || {};
 
         languages.forEach(lang => {
             const row = document.createElement('div');
             row.className = 'simplypoly-lang';
 
+            const savedValue = existing[lang] || '';
+
             row.innerHTML = `
                 <img src="https://flagcdn.com/${lang}.svg" width="24" alt="${lang}">
                 <textarea 
-                    placeholder="Translate to ${lang}"
+                    placeholder="Translate to ${lang.toUpperCase()}"
                     data-lang="${lang}"
                     data-path="${payload.path}"
-                ></textarea>
+                >${savedValue}</textarea>
             `;
+
+            row.querySelector('textarea').addEventListener('input', (e) => {
+                document.dispatchEvent(new CustomEvent('simplypoly:translation:changed', {
+                    detail: { path: payload.path, lang: lang, value: e.target.value }
+                }));
+            });
 
             this.langsEl.appendChild(row);
         });

@@ -79,7 +79,7 @@ export default class EditorFrameView {
 
         let lastHovered = null;
         const editableTags = [
-            'p', 'span', 'strong', 'em', 'a',
+            'p', 'span', 'strong', 'em', 'a', 'b', 'i', 'u', 'li',
             'h1', 'h2', 'h3', 'h4', 'h5', 'h6'
         ];
 

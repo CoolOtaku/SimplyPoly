@@ -39,7 +39,7 @@ class EditorPageView extends AbstractView
             <div class="editor-toolbar">
                 <img class="logo" src="<?php echo esc_url(SIMPLY_POLY_URL . 'assets/img/logo.png'); ?>" alt="Logo" />
                 <div class="controls">
-                    <button class="save" onclick="">
+                    <button class="save" onclick="" disabled="true">
                         💾 <?php echo esc_html__('Save', Helper::PLUGIN_DOMAIN); ?>
                     </button>
                     <button onclick="location.reload()">
