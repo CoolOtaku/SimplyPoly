@@ -1,8 +1,10 @@
 import Helper from '../helper.js';
 
 export default class EditorFrameView {
-    constructor(selector) {
+    constructor(selector, store) {
         this.frame = document.querySelector(selector);
+        this.store = store;
+
         this.iframeDoc = null;
         this.onZoomChange = null;
         this.onZoomIn = null;
@@ -16,6 +18,7 @@ export default class EditorFrameView {
         }
 
         this.frame.addEventListener('load', () => this.onWait());
+        this.initPreviewListener(this.store);
     }
 
     onWait(attempt = 0) {
@@ -50,11 +53,10 @@ export default class EditorFrameView {
         this.iframeDoc.addEventListener('wheel', (e) => {
             if (e.ctrlKey) {
                 e.preventDefault();
-                if (e.deltaY < 0) {
-                    if (this.onZoomIn) this.onZoomIn();
-                } else {
-                    if (this.onZoomOut) this.onZoomOut();
-                }
+
+                if (e.deltaY < 0) if (this.onZoomIn) this.onZoomIn();
+                else if (this.onZoomOut) this.onZoomOut();
+
                 this.frame.classList.add('zoom-cursor');
             }
         }, { passive: false });
@@ -112,7 +114,7 @@ export default class EditorFrameView {
             const target = e.target;
 
             if (!target.classList.contains('simplypoly-editable-hover')) return;
-            
+
             e.preventDefault();
             e.stopPropagation();
 
@@ -127,5 +129,32 @@ export default class EditorFrameView {
 
             document.dispatchEvent(new CustomEvent('simplypoly:element:selected', { detail: payload }));
         });
+    }
+
+    initPreviewListener(store) {
+        document.addEventListener('simplypoly:preview:changed', (e) => {
+            const lang = e.detail.lang;
+
+            if (!lang) {
+                this.resetPreview();
+                return;
+            }
+
+            this.applyPreview(lang, store.getAll());
+        });
+    }
+
+    applyPreview(lang, translations) {
+        Object.keys(translations).forEach(path => {
+            const el = this.iframeDoc.querySelector(path);
+            if (!el) return;
+
+            const text = translations[path][lang];
+            if (text) el.textContent = text;
+        });
+    }
+
+    resetPreview() {
+        this.frame.contentWindow.location.reload();
     }
 }

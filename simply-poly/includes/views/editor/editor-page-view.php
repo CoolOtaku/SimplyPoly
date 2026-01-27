@@ -19,6 +19,8 @@ class EditorPageView extends AbstractView
         if (!$post) wp_die(__('No post ID provided!', Helper::PLUGIN_DOMAIN));
 
         $preview_url = get_permalink($post) . '?simplypoly_preview=1';
+        $langs = get_option(Helper::LANGUAGES, []);
+        if (!is_array($langs)) $langs = [$langs];
 ?>
 
         <!DOCTYPE html>
@@ -39,6 +41,18 @@ class EditorPageView extends AbstractView
             <div class="editor-toolbar">
                 <img class="logo" src="<?php echo esc_url(SIMPLY_POLY_URL . 'assets/img/logo.png'); ?>" alt="Logo" />
                 <div class="controls">
+                    <select id="simplypoly-preview-lang" required="true">
+                        <option value="">
+                            <?php echo esc_html__('Preview: Off', Helper::PLUGIN_DOMAIN); ?>
+                        </option>
+
+                        <?php foreach ($langs as $lang): ?>
+                            <option value="<?php echo esc_attr($lang); ?>">
+                                <?php echo esc_html(strtoupper($lang)); ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+
                     <button class="save" onclick="" disabled="true">
                         💾 <?php echo esc_html__('Save', Helper::PLUGIN_DOMAIN); ?>
                     </button>
@@ -80,11 +94,8 @@ class EditorPageView extends AbstractView
                 true
             );
 
-            $langs_values = get_option(Helper::LANGUAGES, []);
-            if (!is_array($langs_values)) $langs_values = [$langs_values];
-
             wp_localize_script('simply-poly-editor', 'params', [
-                'langs' => $langs_values
+                'langs' => $langs
             ]);
 
             wp_add_inline_script(

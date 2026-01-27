@@ -11,7 +11,7 @@ export default class EditorController {
         this.state = new EditorState();
         this.store = new TranslationStore();
 
-        this.view = new EditorFrameView('#editor-frame');
+        this.view = new EditorFrameView('#editor-frame', this.store);
 
         this.translationPanel = new TranslationPanelView('#simplypoly-panel');
         this.translationService = new TranslationService();
@@ -24,6 +24,13 @@ export default class EditorController {
 
             this.store.setOriginal(path, existing);
             this.translationPanel.show(e.detail, params.langs, this.store.getAll());
+        });
+
+        const previewSelect = document.getElementById('simplypoly-preview-lang');
+        previewSelect.addEventListener('change', (e) => {
+            const lang = e.target.value;
+
+            document.dispatchEvent(new CustomEvent('simplypoly:preview:changed', { detail: { lang } }));
         });
 
         const saveBtn = document.querySelector('.save');

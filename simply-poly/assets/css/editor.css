@@ -57,9 +57,33 @@ body.simplypoly-editor {
     box-shadow: none !important;
 }
 
+/* selects */
+.simplypoly-editor select {
+    background: linear-gradient(45deg, var(--body-bg-color), var(--wrapper-bg-color)) !important;
+    padding: calc(var(--button-border-radius) / 2) var(--button-border-radius) !important;
+    border-radius: var(--button-border-radius) !important;
+    border: 2px var(--accent-color) solid !important;
+    font-size: var(--button-font-size) !important;
+    color: var(--text-color) !important;
+    cursor: pointer !important;
+    width: unset !important;
+}
+
+.simplypoly-editor select:hover {
+    box-shadow: 0 0 15px var(--primary-color) !important;
+}
+
+.simplypoly-editor select:invalid {
+    color: gray !important;
+}
+
+.simplypoly-editor option {
+    background-color: var(--wrapper-bg-color) !important;
+}
+
 /* TOOL BAR */
 .editor-toolbar {
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2) !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2) !important;
     background: var(--widget-bg-color) !important;
     justify-content: space-between !important;
     align-items: center !important;
@@ -71,6 +95,11 @@ body.simplypoly-editor {
 .editor-toolbar .logo {
     object-fit: contain !important;
     height: 6vh !important;
+}
+
+#simplypoly-preview-lang {
+    display: inline-flex !important;
+    margin-right: var(--button-font-size) !important;
 }
 
 /* EDITOR IFRAME */
