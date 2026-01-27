@@ -5,19 +5,26 @@ import EditorFrameView from '../views/editor-frame-view.js';
 import TranslationPanelView from '../views/translation-panel-view.js';
 
 import TranslationService from '../services/translation-service.js';
+import PreviewService from '../services/preview-service.js';
 
 export default class EditorController {
     constructor() {
         this.state = new EditorState();
         this.store = new TranslationStore();
 
-        this.view = new EditorFrameView('#editor-frame', this.store);
-
+        this.view = new EditorFrameView('#editor-frame');
         this.translationPanel = new TranslationPanelView('#simplypoly-panel');
+
         this.translationService = new TranslationService();
+        this.previewService = new PreviewService(this.view.frame, this.store);
+
+        this.previewTimeout = null;
     }
 
     init() {
+        this.view.init();
+        this.previewService.init();
+
         document.addEventListener('simplypoly:element:selected', (e) => {
             const path = e.detail.path;
             const existing = this.store.getAll()[path] || {};
@@ -37,16 +44,19 @@ export default class EditorController {
         document.addEventListener('simplypoly:translation:changed', (e) => {
             this.store.update(e.detail.path, e.detail.lang, e.detail.value);
 
-            if (this.store.hasChanges(e.detail.path)) saveBtn.disabled = false;
-            else saveBtn.disabled = true;
+            saveBtn.disabled = !this.store.hasChanges(e.detail.path);
+
+            if (this.previewTimeout) clearTimeout(this.previewTimeout);
+
+            this.previewTimeout = setTimeout(() => {
+                this.previewService.applyPreview();
+            }, 1000);
         });
 
         this.view.onZoomChange = (zoom) => this.state.setZoom(zoom);
 
         this.view.onZoomIn = () => this.zoomIn();
         this.view.onZoomOut = () => this.zoomOut();
-
-        this.view.init();
 
         document.getElementById('zoom-in').addEventListener('click', () => this.zoomIn());
         document.getElementById('zoom-out').addEventListener('click', () => this.zoomOut());
