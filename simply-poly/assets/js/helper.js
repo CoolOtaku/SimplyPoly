@@ -1,20 +1,25 @@
 export default class Helper {
     static getDomPath(el) {
-        const path = [];
-        while (el && el.nodeType === Node.ELEMENT_NODE) {
-            let selector = el.nodeName.toLowerCase();
-            if (el.id) {
-                selector += `#${el.id}`;
-                path.unshift(selector);
-                break;
-            } else {
-                let sib = el, nth = 1;
-                while (sib = sib.previousElementSibling) nth++;
-                selector += `:nth-child(${nth})`;
-            }
-            path.unshift(selector);
-            el = el.parentNode;
+        if (!el || el.nodeType !== Node.ELEMENT_NODE) return null;
+
+        const segments = [];
+
+        while (el && el.tagName.toLowerCase() !== 'html') {
+            const tag = el.tagName.toLowerCase();
+
+            const parent = el.parentElement;
+            if (!parent) break;
+
+            const siblings = Array.from(parent.children)
+                .filter(child => child.tagName === el.tagName);
+
+            const index = siblings.indexOf(el) + 1;
+
+            segments.unshift(`${tag}:nth-of-type(${index})`);
+
+            el = parent;
         }
-        return path.join(' > ');
+
+        return segments.join(' > ');
     }
 }
