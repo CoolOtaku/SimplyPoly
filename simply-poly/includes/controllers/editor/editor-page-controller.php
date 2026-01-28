@@ -28,7 +28,21 @@ class EditorPageController extends AbstractController implements UpdatableDeleta
 
     public function get($attrs = null): bool
     {
-        return $this->translationController->get($attrs);
+        if (
+            empty($_POST) ||
+            !isset($_POST['nonce']) ||
+            !wp_verify_nonce($_POST['nonce'], 'simplypoly_save_translation') ||
+            !current_user_can('edit_pages')
+        ) {
+            wp_send_json_error([
+                'message' => __('Security check failed', Helper::PLUGIN_DOMAIN)
+            ], 403);
+        }
+
+        $data = $this->translationController->get();
+        wp_send_json_success(['data' => $data]);
+
+        return true;
     }
 
     public function post($attrs = null): bool

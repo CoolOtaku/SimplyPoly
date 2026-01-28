@@ -17,6 +17,7 @@ use Throwable;
 use SimplyPoly\Helper;
 use SimplyPoly\Controllers\EditorPageController;
 use SimplyPoly\Controllers\AdminPageController;
+use SimplyPoly\Controllers\ClientController;
 
 if (!defined('ABSPATH')) exit;
 
@@ -50,11 +51,13 @@ class SimplyPolyPlugin
         $this->importFile('includes/controllers/*.php');
         $this->importFile('includes/controllers/admin/*.php');
         $this->importFile('includes/controllers/editor/*.php');
+        $this->importFile('includes/controllers/client/*.php');
 
         Dotenv::loadEnvFile(SIMPLY_POLY_PATH . '.env');
 
         new EditorPageController();
         new AdminPageController();
+        new ClientController();
     }
 
     private function importFile(string $path): void

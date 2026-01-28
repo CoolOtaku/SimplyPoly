@@ -28,6 +28,33 @@ class Helper
 
         return 'UNKNOWN';
     }
+
+    public static function cssToXpath($css)
+    {
+        $parts = explode(' > ', trim($css));
+        $xpath = '';
+
+        foreach ($parts as $part) {
+            if (!preg_match('/^([a-z0-9]+):nth-of-type\((\d+)\)$/i', $part, $matches)) return null;
+
+            $tag = $matches[1];
+            $index = $matches[2];
+
+            $xpath .= '/' . $tag . '[' . $index . ']';
+        }
+
+        return $xpath;
+    }
+
+    public static function getCurrentLang(): ?string
+    {
+        $lang = get_query_var('lang');
+
+        if ($lang) return sanitize_text_field($lang);
+        if (!empty($_COOKIE['simplypoly_lang'])) return sanitize_text_field($_COOKIE['simplypoly_lang']);
+
+        return null;
+    }
 }
 
 ?>

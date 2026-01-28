@@ -15,20 +15,10 @@ class TranslationController extends AbstractController implements UpdatableDelet
         parent::__construct();
     }
 
-    public function get($attrs = null): bool
+    public function get($attrs = null): array|string
     {
-        if (
-            empty($_POST) ||
-            !isset($_POST['nonce']) ||
-            !wp_verify_nonce($_POST['nonce'], 'simplypoly_save_translation') ||
-            !current_user_can('edit_pages')
-        ) {
-            wp_send_json_error([
-                'message' => __('Security check failed', Helper::PLUGIN_DOMAIN)
-            ], 403);
-        }
-
         $post_id = intval($_POST['post_id']);
+        if (!$post_id) $post_id = intval($attrs['post_id'] ?? 0);
 
         if (!$post_id) {
             wp_send_json_error([
@@ -37,12 +27,9 @@ class TranslationController extends AbstractController implements UpdatableDelet
         }
 
         $translations = get_post_meta($post_id, '_simplypoly_translations', true);
-
         if (!is_array($translations)) $translations = [];
 
-        wp_send_json_success(['data' => $translations]);
-
-        return true;
+        return $translations;
     }
 
     public function post($attrs = null): bool
