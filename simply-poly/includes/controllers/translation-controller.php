@@ -17,6 +17,31 @@ class TranslationController extends AbstractController implements UpdatableDelet
 
     public function get($attrs = null): bool
     {
+        if (
+            empty($_POST) ||
+            !isset($_POST['nonce']) ||
+            !wp_verify_nonce($_POST['nonce'], 'simplypoly_save_translation') ||
+            !current_user_can('edit_pages')
+        ) {
+            wp_send_json_error([
+                'message' => __('Security check failed', Helper::PLUGIN_DOMAIN)
+            ], 403);
+        }
+
+        $post_id = intval($_POST['post_id']);
+
+        if (!$post_id) {
+            wp_send_json_error([
+                'message' => __('Invalid post ID', Helper::PLUGIN_DOMAIN)
+            ], 400);
+        }
+
+        $translations = get_post_meta($post_id, '_simplypoly_translations', true);
+
+        if (!is_array($translations)) $translations = [];
+
+        wp_send_json_success(['data' => $translations]);
+
         return true;
     }
 
@@ -34,24 +59,27 @@ class TranslationController extends AbstractController implements UpdatableDelet
         }
 
         $post_id = intval($_POST['post_id']);
-        $lang = sanitize_text_field($_POST['lang']);
-        $text = wp_kses_post($_POST['text']);
+        $translations_raw = $_POST['translations'] ?? '';
 
-        if (!$post_id || !$lang) {
+        if (!$post_id || empty($translations_raw)) {
             wp_send_json_error([
                 'message' => __('Invalid data', Helper::PLUGIN_DOMAIN)
             ], 400);
         }
 
-        $translations = get_post_meta($post_id, '_simplypoly_translations', true);
-        if (!is_array($translations)) $translations = [];
-        $translations[$lang] = $text;
+        $translations = json_decode(stripslashes($translations_raw), true);
+
+        if (!is_array($translations)) {
+            wp_send_json_error([
+                'message' => __('Invalid JSON format', Helper::PLUGIN_DOMAIN)
+            ], 400);
+        }
 
         update_post_meta($post_id, '_simplypoly_translations', $translations);
 
         wp_send_json_success([
-            'message' => __('Translation saved', Helper::PLUGIN_DOMAIN),
-            'data'    => $translations
+            'message' => __('Translations saved successfully', Helper::PLUGIN_DOMAIN),
+            'data' => $translations
         ]);
 
         return true;

@@ -9,6 +9,11 @@ export default class TranslationStore {
         this.current[path] = { ...translations };
     }
 
+    setAll(data) {
+        this.original = JSON.parse(JSON.stringify(data));
+        this.current = JSON.parse(JSON.stringify(data));
+    }
+
     update(path, lang, value) {
         if (!this.current[path]) this.current[path] = {};
         this.current[path][lang] = value;

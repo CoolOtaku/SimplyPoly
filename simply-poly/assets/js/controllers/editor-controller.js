@@ -21,16 +21,21 @@ export default class EditorController {
         this.previewTimeout = null;
     }
 
-    init() {
+    async init() {
         this.view.init();
         this.previewService.init();
+
+        try {
+            const data = await this.translationService.load();
+            this.store.setAll(data);
+        } catch (error) { console.error(error) }
 
         document.addEventListener('simplypoly:element:selected', (e) => {
             const path = e.detail.path;
             const existing = this.store.getAll()[path] || {};
 
             this.store.setOriginal(path, existing);
-            this.translationPanel.show(e.detail, params.langs, this.store.getAll());
+            this.translationPanel.show(e.detail, simplypoly.langs, this.store.getAll());
         });
 
         const previewSelect = document.getElementById('simplypoly-preview-lang');
@@ -41,6 +46,21 @@ export default class EditorController {
         });
 
         const saveBtn = document.querySelector('.save');
+        saveBtn.addEventListener('click', async () => {
+            try {
+                saveBtn.disabled = true;
+
+                const result = await this.translationService.save(this.store.getAll());
+
+                alert(result.message);
+
+                this.store.reset();
+            } catch (error) {
+                alert(error.message);
+                saveBtn.disabled = false;
+            }
+        });
+
         document.addEventListener('simplypoly:translation:changed', (e) => {
             this.store.update(e.detail.path, e.detail.lang, e.detail.value);
 

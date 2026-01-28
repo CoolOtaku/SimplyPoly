@@ -22,6 +22,7 @@ class EditorPageController extends AbstractController implements UpdatableDeleta
         add_action('admin_bar_menu', [$this, 'addButtonForAdminBar'], 100);
 
         $this->translationController = new TranslationController();
+        add_action('wp_ajax_simplypoly_get_translations', [$this, 'get']);
         add_action('wp_ajax_simplypoly_save_translation', [$this, 'post']);
     }
 
