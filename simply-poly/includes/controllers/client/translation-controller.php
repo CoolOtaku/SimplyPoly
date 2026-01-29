@@ -15,21 +15,16 @@ class TranslationController extends AbstractController implements UpdatableDelet
         parent::__construct();
     }
 
-    public function get($attrs = null): array|string
+    public function get($attrs = null): array
     {
-        $post_id = intval($_POST['post_id']);
-        if (!$post_id) $post_id = intval($attrs['post_id'] ?? 0);
+        $post_id = 0;
+        if (isset($_POST['post_id'])) $post_id = intval($_POST['post_id']);
+        if (!$post_id && isset($attrs['post_id'])) $post_id = intval($attrs['post_id']);
 
-        if (!$post_id) {
-            wp_send_json_error([
-                'message' => __('Invalid post ID', Helper::PLUGIN_DOMAIN)
-            ], 400);
-        }
+        if (!$post_id) return [];
 
         $translations = get_post_meta($post_id, '_simplypoly_translations', true);
-        if (!is_array($translations)) $translations = [];
-
-        return $translations;
+        return is_array($translations) ? $translations : [];
     }
 
     public function post($attrs = null): bool

@@ -16,43 +16,40 @@ class ClientController extends AbstractController
         parent::__construct();
 
         $this->translationController = new TranslationController();
-
-        add_filter('query_vars', function ($vars) {
-            $vars[] = 'lang';
-            return $vars;
-        });
-
-        //if (!is_admin()) add_action('template_redirect', [$this, 'get'], 0);
+        if (!is_admin()) add_action('template_redirect', [$this, 'get'], 0);
     }
 
-    public function get($content): bool
+    public function get($attrs = null): mixed
     {
-        if (!is_singular()) return false;
+        if (!Helper::isFrontendRequest()) return null;
+        if (!is_singular()) return null;
+        if (is_preview()) return null;
+        
         ob_start([$this, 'post']);
-        return true;
+        return null;
     }
 
-    public function post($html): string|array
+    public function post($html, $phase = null): string
     {
+        if (!is_singular()) return (string) $html;
+
         $post_id = get_the_ID();
-        if (!$post_id) return $html;
+        if (!$post_id) return (string) $html;
 
         $translations = $this->translationController->get(['post_id' => $post_id]);
-        if (empty($translations)) return $html;
+        if (empty($translations)) return (string) $html;
 
         $current_lang = Helper::getCurrentLang();
-        return $current_lang;
-        if (!$current_lang) return $html;
+        if (!$current_lang) return (string) $html;
 
         libxml_use_internal_errors(true);
 
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $dom->loadHTML('<?xml encoding="UTF-8">' . $html);
+        $dom->loadHTML('<?xml encoding="UTF-8">' . (string) $html);
 
         $xpath = new \DOMXPath($dom);
 
         foreach ($translations as $cssPath => $langs) {
-
             if (empty($langs[$current_lang])) continue;
 
             $xpathQuery = Helper::cssToXpath($cssPath);
@@ -61,12 +58,10 @@ class ClientController extends AbstractController
             $nodes = $xpath->query($xpathQuery);
             if (!$nodes) continue;
 
-            foreach ($nodes as $node) {
-                $node->nodeValue = $langs[$current_lang];
-            }
+            foreach ($nodes as $node) $node->nodeValue = $langs[$current_lang];
         }
 
-        return $dom->saveHTML();
+        return $dom->saveHTML() ?: (string) $html;
     }
 }
 

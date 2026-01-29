@@ -55,6 +55,20 @@ class Helper
 
         return null;
     }
+
+    public static function isFrontendRequest(): bool
+    {
+        if (is_admin()) return false;
+        if (defined('DOING_AJAX') && DOING_AJAX) return false;
+        if (defined('REST_REQUEST') && REST_REQUEST) return false;
+        if (defined('WP_CLI') && WP_CLI) return false;
+        
+        if (isset($_GET['elementor-preview'])) return false;
+        if (isset($_GET['action']) && $_GET['action'] === 'elementor') return false;
+        if (!empty($_SERVER['HTTP_SEC_FETCH_DEST']) && $_SERVER['HTTP_SEC_FETCH_DEST'] === 'iframe') return false;
+        
+        return true;
+    }
 }
 
 ?>
