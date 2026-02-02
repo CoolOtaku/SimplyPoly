@@ -20,6 +20,7 @@ class AdminPageController extends AbstractController
     public function get($attrs = null): bool
     {
         register_setting(Helper::LANGUAGES_GROUP, Helper::LANGUAGES);
+        register_setting(Helper::LANGUAGES_GROUP, Helper::DEFAULT_LANGUAGE);
 
         return true;
     }

@@ -1,5 +1,5 @@
-jQuery(document).ready(function($) {
-    function formatLang (lang) {
+jQuery(document).ready(function ($) {
+    function formatLang(lang) {
         if (!lang.id) return lang.text;
         const flagUrl = $(lang.element).data('flag');
         if (!flagUrl) return lang.text;
@@ -10,5 +10,10 @@ jQuery(document).ready(function($) {
         templateResult: formatLang,
         templateSelection: formatLang,
         width: 'resolve'
+    });
+
+    $('#default-language').select2({
+        templateResult: formatLang,
+        templateSelection: formatLang
     });
 });

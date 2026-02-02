@@ -11,6 +11,7 @@ class Helper
     
     public const LANGUAGES_GROUP = 'simplypoly_languages_group';
     public const LANGUAGES = 'simplypoly_languages';
+    public const DEFAULT_LANGUAGE = 'simplypoly_default_language';
 
     public static array $ALL_LANGUAGES = [];
 
