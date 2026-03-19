@@ -53,6 +53,7 @@ class Helper
 
         if ($lang) return sanitize_text_field($lang);
         if (!empty($_COOKIE['simplypoly_lang'])) return sanitize_text_field($_COOKIE['simplypoly_lang']);
+        else return get_option(Helper::DEFAULT_LANGUAGE, '');
 
         return null;
     }

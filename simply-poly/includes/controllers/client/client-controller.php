@@ -29,39 +29,35 @@ class ClientController extends AbstractController
         return null;
     }
 
-    public function post($html, $phase = null): string
+    public function post($html): string
     {
-        if (!is_singular()) return (string) $html;
-
         $post_id = get_the_ID();
-        if (!$post_id) return (string) $html;
+        if (!$post_id) return $html;
 
         $translations = $this->translationController->get(['post_id' => $post_id]);
-        if (empty($translations)) return (string) $html;
+        if (empty($translations)) return $html;
 
         $current_lang = Helper::getCurrentLang();
-        if (!$current_lang) return (string) $html;
+        if (!$current_lang) return $html;
 
         libxml_use_internal_errors(true);
-
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $dom->loadHTML('<?xml encoding="UTF-8">' . (string) $html);
+        $dom->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
 
         $xpath = new \DOMXPath($dom);
-
         foreach ($translations as $cssPath => $langs) {
             if (empty($langs[$current_lang])) continue;
 
             $xpathQuery = Helper::cssToXpath($cssPath);
             if (!$xpathQuery) continue;
 
-            $nodes = $xpath->query($xpathQuery);
-            if (!$nodes) continue;
+            $nodes = $xpath->query('/html' . $xpathQuery);
+            if (!$nodes || $nodes->length === 0) continue;
 
             foreach ($nodes as $node) $node->nodeValue = $langs[$current_lang];
         }
 
-        return $dom->saveHTML() ?: (string) $html;
+        return $dom->saveHTML() ?: $html;
     }
 }
 
