@@ -13,6 +13,10 @@ class Helper
     public const LANGUAGES = 'simplypoly_languages';
     public const DEFAULT_LANGUAGE = 'simplypoly_default_language';
 
+    public const SHOW_FLAGS = 'simplypoly_show_flags';
+    public const SHOW_CODES = 'simplypoly_show_codes';
+    public const SHOW_NAMES = 'simplypoly_show_names';
+
     public static array $ALL_LANGUAGES = [];
 
     public static function init(): void {

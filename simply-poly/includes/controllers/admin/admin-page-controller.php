@@ -13,19 +13,11 @@ class AdminPageController extends AbstractController
     {
         parent::__construct();
 
-        add_action('admin_init', [$this, 'get']);
-        add_action('admin_menu', [$this, 'post']);
+        add_action('admin_menu', [$this, 'get']);
+        add_action('admin_init', [$this, 'post']);
     }
 
     public function get($attrs = null): bool
-    {
-        register_setting(Helper::LANGUAGES_GROUP, Helper::LANGUAGES);
-        register_setting(Helper::LANGUAGES_GROUP, Helper::DEFAULT_LANGUAGE);
-
-        return true;
-    }
-
-    public function post($attrs = null): bool
     {
         add_menu_page(
             '⚙ ' . __('SimplyPoly Settings', Helper::PLUGIN_DOMAIN),
@@ -36,6 +28,17 @@ class AdminPageController extends AbstractController
             'dashicons-admin-site-alt3',
             25
         );
+        
+        return true;
+    }
+
+    public function post($attrs = null): bool
+    {
+        register_setting(Helper::LANGUAGES_GROUP, Helper::LANGUAGES);
+        register_setting(Helper::LANGUAGES_GROUP, Helper::DEFAULT_LANGUAGE);
+        register_setting(Helper::LANGUAGES_GROUP, Helper::SHOW_FLAGS);
+        register_setting(Helper::LANGUAGES_GROUP, Helper::SHOW_CODES);
+        register_setting(Helper::LANGUAGES_GROUP, Helper::SHOW_NAMES);
         
         return true;
     }
