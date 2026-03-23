@@ -84,9 +84,9 @@ class AdminPageView extends AbstractView
                 </th>
                 <td>
                     <?php
-                        $show_flags = get_option(Helper::SHOW_FLAGS, ? 1 : 0);
-                        $show_codes = get_option(Helper::SHOW_CODES, ? 1 : 0);
-                        $show_names = get_option(Helper::SHOW_NAMES, ? 1 : 0);
+                        $show_flags = get_option(Helper::SHOW_FLAGS, 1);
+                        $show_codes = get_option(Helper::SHOW_CODES, 1);
+                        $show_names = get_option(Helper::SHOW_NAMES, 1);
                     ?>
 
                     <label>

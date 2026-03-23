@@ -47,6 +47,7 @@ class SimplyPolyPlugin
         $this->importFile('includes/views/*.php');
         $this->importFile('includes/views/admin/*.php');
         $this->importFile('includes/views/editor/*.php');
+        $this->importFile('includes/views/client/*.php');
 
         $this->importFile('includes/controllers/*.php');
         $this->importFile('includes/controllers/admin/*.php');
