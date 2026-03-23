@@ -45,6 +45,17 @@ class ClientController extends AbstractController
         $dom->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
 
         $xpath = new \DOMXPath($dom);
+
+        $adminBar = $dom->getElementById('wpadminbar');
+        $placeholder = null;
+        $parent = null;
+        
+        if ($adminBar && $adminBar->parentNode) {
+            $parent = $adminBar->parentNode;
+            $placeholder = $dom->createComment('simplypoly-adminbar');
+            $parent->replaceChild($placeholder, $adminBar);
+        }
+
         foreach ($translations as $cssPath => $langs) {
             if (empty($langs[$current_lang])) continue;
 
@@ -56,6 +67,8 @@ class ClientController extends AbstractController
 
             foreach ($nodes as $node) $node->nodeValue = $langs[$current_lang];
         }
+
+        if ($placeholder && $parent && $adminBar) $parent->replaceChild($adminBar, $placeholder);
 
         return $dom->saveHTML() ?: $html;
     }

@@ -10,6 +10,8 @@ export default class TranslationStore {
     }
 
     setAll(data) {
+        if (!data || typeof data !== 'object' || Array.isArray(data)) data = {};
+        
         this.original = JSON.parse(JSON.stringify(data));
         this.current = JSON.parse(JSON.stringify(data));
     }

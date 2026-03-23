@@ -5,18 +5,21 @@ export default class Helper {
         const segments = [];
 
         while (el && el.tagName.toLowerCase() !== 'html') {
-            const tag = el.tagName.toLowerCase();
+            if (el.id === 'wpadminbar') {
+                el = el.parentElement;
+                continue;
+            }
 
+            const tag = el.tagName.toLowerCase();
             const parent = el.parentElement;
             if (!parent) break;
 
-            const siblings = Array.from(parent.children)
-                .filter(child => child.tagName === el.tagName);
+            const siblings = Array.from(parent.children).filter(child =>
+                child.tagName === el.tagName && child.id !== 'wpadminbar'
+            );
 
             const index = siblings.indexOf(el) + 1;
-
             segments.unshift(`${tag}:nth-of-type(${index})`);
-
             el = parent;
         }
 
