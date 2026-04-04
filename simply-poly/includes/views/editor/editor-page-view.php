@@ -10,7 +10,6 @@ if (!defined('ABSPATH')) exit;
 
 class EditorPageView extends AbstractView
 {
-    #[NoReturn]
     public function render($attrs): string
     {
         if (!current_user_can('edit_pages')) wp_die(__('Access denied!', Helper::PLUGIN_DOMAIN));

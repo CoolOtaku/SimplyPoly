@@ -31,50 +31,43 @@ class AdminPageView extends AbstractView
                 <th scope="row">
                     <?php echo '🌐 ' . esc_html__('Languages for translation', Helper::PLUGIN_DOMAIN); ?>
                 </th>
+
+                <!-- Multi select languages -->
                 <td>
-                    <div style="display:flex; gap:20px; align-items:flex-start; flex-wrap:wrap;">
-                        <!-- Multi select -->
-                        <div>
-                            <select id="language-select" name="<?php echo esc_attr(Helper::LANGUAGES); ?>[]" multiple
-                                size="5" style="min-width:250px;">
-                                <?php foreach (Helper::$ALL_LANGUAGES as $key => $label): ?>
-                                <option value="<?php echo esc_attr($key); ?>"
-                                    data-flag="https://flagcdn.com/<?php echo esc_attr($key); ?>.svg"
-                                    <?php selected(in_array($key, $selected_values)); ?>>
-                                    <?php echo esc_html($label); ?>
-                                </option>
-                                <?php endforeach; ?>
-                            </select>
+                    <select id="language-select" name="<?php echo esc_attr(Helper::LANGUAGES); ?>[]" multiple size="5">
+                        <?php foreach (Helper::$ALL_LANGUAGES as $key => $label): ?>
+                        <option value="<?php echo esc_attr($key); ?>"
+                            data-flag="https://flagcdn.com/<?php echo esc_attr($key); ?>.svg"
+                            <?php selected(in_array($key, $selected_values)); ?>>
+                            <?php echo esc_html($label); ?>
+                        </option>
+                        <?php endforeach; ?>
+                    </select>
 
-                            <p class="description">
-                                <?php echo esc_html__('Select one or more languages for translation (Ctrl/Command + click)', Helper::PLUGIN_DOMAIN); ?>
-                            </p>
-                        </div>
+                    <p class="description">
+                        <?php echo esc_html__('Select one or more languages for translation (Ctrl/Command + click)', Helper::PLUGIN_DOMAIN); ?>
+                    </p>
+                </td>
 
-                        <!-- Default language -->
-                        <div>
-                            <select id="default-language" name="<?php echo esc_attr(Helper::DEFAULT_LANGUAGE); ?>"
-                                style="min-width:200px;">
+                <!-- Default language -->
+                <td>
+                    <select id="default-language" name="<?php echo esc_attr(Helper::DEFAULT_LANGUAGE); ?>">
+                        <option value="">
+                            <?php echo esc_html__('Default language', Helper::PLUGIN_DOMAIN); ?>
+                        </option>
 
-                                <option value="">
-                                    <?php echo esc_html__('Default language', Helper::PLUGIN_DOMAIN); ?>
-                                </option>
+                        <?php foreach ($selected_values as $key): ?>
+                        <option value="<?php echo esc_attr($key); ?>"
+                            data-flag="https://flagcdn.com/<?php echo esc_attr($key); ?>.svg"
+                            <?php selected($default_language ?? '', $key); ?>>
+                            <?php echo esc_html(Helper::$ALL_LANGUAGES[$key] ?? $key); ?>
+                        </option>
+                        <?php endforeach; ?>
+                    </select>
 
-                                <?php foreach ($selected_values as $key): ?>
-                                <option value="<?php echo esc_attr($key); ?>"
-                                    data-flag="https://flagcdn.com/<?php echo esc_attr($key); ?>.svg"
-                                    <?php selected($default_language ?? '', $key); ?>>
-                                    <?php echo esc_html(Helper::$ALL_LANGUAGES[$key] ?? $key); ?>
-                                </option>
-                                <?php endforeach; ?>
-
-                            </select>
-
-                            <p class="description">
-                                <?php echo esc_html__('Main site language', Helper::PLUGIN_DOMAIN); ?>
-                            </p>
-                        </div>
-                    </div>
+                    <p class="description">
+                        <?php echo esc_html__('Main site language', Helper::PLUGIN_DOMAIN); ?>
+                    </p>
                 </td>
             </tr>
 
@@ -82,6 +75,8 @@ class AdminPageView extends AbstractView
                 <th scope="row">
                     <?php echo '⚙️ ' . esc_html__('Switcher display settings', Helper::PLUGIN_DOMAIN); ?>
                 </th>
+
+                <!-- Switcher settings -->
                 <td>
                     <?php
                         $show_flags = get_option(Helper::SHOW_FLAGS, 1);
@@ -112,6 +107,50 @@ class AdminPageView extends AbstractView
                     <p class="description">
                         <?php echo esc_html__('Control how language switcher is displayed', Helper::PLUGIN_DOMAIN); ?>
                     </p>
+                </td>
+
+                <!-- Switcher sortcode -->
+                <td>
+                    <label>
+                        <?php echo esc_html__('Dropdown switcher', Helper::PLUGIN_DOMAIN); ?>
+                    </label>
+                    <br>
+                    <input type="text" value='[simply_poly_switcher type="dropdown"]' readonly
+                        onclick="this.select(); document.execCommand('copy');"/>
+                    <button type="button" class="button" onclick="copySortcode(this);">
+                        <?php echo esc_html__('Copy', Helper::PLUGIN_DOMAIN); ?>
+                    </button>
+                    <br>
+                    <label>
+                        <?php echo esc_html__('Inline switcher', Helper::PLUGIN_DOMAIN); ?>
+                    </label>
+                    <br>
+                    <input type="text" value='[simply_poly_switcher type="inline"]' readonly
+                        onclick="this.select(); document.execCommand('copy');"/>
+                    <button type="button" class="button" onclick="copySortcode(this);">
+                        <?php echo esc_html__('Copy', Helper::PLUGIN_DOMAIN); ?>
+                    </button>
+
+                    <p class="description">
+                        <?php echo esc_html__('Use dropdown or inline shortcode anywhere on the site to display the language switcher.', Helper::PLUGIN_DOMAIN); ?>
+                    </p>
+
+                    <script>
+                        window.copySortcode = function(button) {
+                            const input = button.previousElementSibling;
+                            input.select();
+                            input.setSelectionRange(0, 99999);
+
+                            document.execCommand('copy');
+
+                            const originalText = button.innerText;
+                            button.innerText = 'Copied!';
+
+                            setTimeout(() => {
+                                button.innerText = originalText;
+                            }, 1500);
+                        }
+                    </script>
                 </td>
             </tr>
         </table>

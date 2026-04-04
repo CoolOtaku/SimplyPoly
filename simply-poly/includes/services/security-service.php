@@ -104,5 +104,3 @@ class SecurityService
         return (is_numeric($decrypted) && (int)$decrypted > 0) ? (int)$decrypted : null;
     }
 }
-
-?>

@@ -96,5 +96,3 @@ class EditorPageController extends AbstractController implements UpdatableDeleta
         ]);
     }
 }
-
-?>

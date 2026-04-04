@@ -6,9 +6,9 @@ if (!defined('ABSPATH')) exit;
 
 class Helper
 {
-    public const PLUGIN_NAME = 'SimplyPoly';
+    public const PLUGIN_NAME = 'Simply Poly';
     public const PLUGIN_DOMAIN = 'simply-poly';
-    
+
     public const LANGUAGES_GROUP = 'simplypoly_languages_group';
     public const LANGUAGES = 'simplypoly_languages';
     public const DEFAULT_LANGUAGE = 'simplypoly_default_language';
@@ -19,7 +19,8 @@ class Helper
 
     public static array $ALL_LANGUAGES = [];
 
-    public static function init(): void {
+    public static function init(): void
+    {
         self::$ALL_LANGUAGES = json_decode(file_get_contents(SIMPLY_POLY_PATH . 'all-languages.json'), true);
     }
 
@@ -68,13 +69,11 @@ class Helper
         if (defined('DOING_AJAX') && DOING_AJAX) return false;
         if (defined('REST_REQUEST') && REST_REQUEST) return false;
         if (defined('WP_CLI') && WP_CLI) return false;
-        
+
         if (isset($_GET['elementor-preview'])) return false;
         if (isset($_GET['action']) && $_GET['action'] === 'elementor') return false;
         if (!empty($_SERVER['HTTP_SEC_FETCH_DEST']) && $_SERVER['HTTP_SEC_FETCH_DEST'] === 'iframe') return false;
-        
+
         return true;
     }
 }
-
-?>

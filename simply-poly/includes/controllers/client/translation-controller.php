@@ -79,5 +79,3 @@ class TranslationController extends AbstractController implements UpdatableDelet
         return true;
     }
 }
-
-?>

@@ -20,7 +20,7 @@ class AdminPageController extends AbstractController
     public function get($attrs = null): bool
     {
         add_menu_page(
-            '⚙ ' . __('SimplyPoly Settings', Helper::PLUGIN_DOMAIN),
+            '⚙ ' . __('Simply Poly Settings', Helper::PLUGIN_DOMAIN),
             esc_html(Helper::PLUGIN_NAME),
             'manage_options',
             'simply-poly-main',
@@ -28,7 +28,7 @@ class AdminPageController extends AbstractController
             'dashicons-admin-site-alt3',
             25
         );
-        
+
         return true;
     }
 
@@ -39,9 +39,7 @@ class AdminPageController extends AbstractController
         register_setting(Helper::LANGUAGES_GROUP, Helper::SHOW_FLAGS);
         register_setting(Helper::LANGUAGES_GROUP, Helper::SHOW_CODES);
         register_setting(Helper::LANGUAGES_GROUP, Helper::SHOW_NAMES);
-        
+
         return true;
     }
 }
-
-?>

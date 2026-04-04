@@ -1,7 +1,7 @@
 <?php
 
 /*
-Plugin Name: SimplyPoly
+Plugin Name: Simply Poly
 Description: A lightweight multilingual plugin for WordPress that manages translations inside a single page using a visual translation builder.
 Text Domain: simply-poly
 Domain Path: /languages
@@ -75,5 +75,3 @@ class SimplyPolyPlugin
 
 $simplyPolyPlugin = new SimplyPolyPlugin();
 $simplyPolyPlugin->init();
-
-?>

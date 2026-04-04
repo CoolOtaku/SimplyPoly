@@ -10,7 +10,4 @@ interface UpdatableDeletableInterface
     public function update($attrs): mixed;
 
     public function delete($attrs): mixed;
-
 }
-
-?>

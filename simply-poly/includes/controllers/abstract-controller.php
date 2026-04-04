@@ -15,7 +15,4 @@ abstract class AbstractController
     abstract public function get($attrs): mixed;
 
     abstract public function post($attrs): mixed;
-
 }
-
-?>

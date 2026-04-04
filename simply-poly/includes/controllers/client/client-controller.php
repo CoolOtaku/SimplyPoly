@@ -3,6 +3,7 @@
 namespace SimplyPoly\Controllers;
 
 use SimplyPoly\Helper;
+use SimplyPoly\Views\SwitchLanguagesView;
 use SimplyPoly\Controllers\TranslationController;
 
 if (!defined('ABSPATH')) exit;
@@ -17,6 +18,8 @@ class ClientController extends AbstractController
 
         $this->translationController = new TranslationController();
         if (!is_admin()) add_action('template_redirect', [$this, 'get'], 0);
+
+        new SwitchLanguagesView();
     }
 
     public function get($attrs = null): mixed
@@ -24,7 +27,7 @@ class ClientController extends AbstractController
         if (!Helper::isFrontendRequest()) return null;
         if (!is_singular()) return null;
         if (is_preview()) return null;
-        
+
         ob_start([$this, 'post']);
         return null;
     }
@@ -49,7 +52,7 @@ class ClientController extends AbstractController
         $adminBar = $dom->getElementById('wpadminbar');
         $placeholder = null;
         $parent = null;
-        
+
         if ($adminBar && $adminBar->parentNode) {
             $parent = $adminBar->parentNode;
             $placeholder = $dom->createComment('simplypoly-adminbar');
@@ -73,5 +76,3 @@ class ClientController extends AbstractController
         return $dom->saveHTML() ?: $html;
     }
 }
-
-?>

@@ -16,15 +16,7 @@ class AssetsLoader
         else add_action('wp_enqueue_scripts', [self::class, 'enqueuePublicAssets']);
     }
 
-    public static function enqueueAdminAssets(): void
-    {
+    public static function enqueueAdminAssets(): void {}
 
-    }
-
-    public static function enqueuePublicAssets(): void
-    {
-        
-    }
+    public static function enqueuePublicAssets(): void {}
 }
-
-?>
