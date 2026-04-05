@@ -17,7 +17,11 @@ class ClientController extends AbstractController
         parent::__construct();
 
         $this->translationController = new TranslationController();
-        if (!is_admin()) add_action('template_redirect', [$this, 'get'], 0);
+
+        if (!is_admin()) {
+            add_action('init', [$this, 'handleLanguage']);
+            add_action('template_redirect', [$this, 'get'], 0);
+        }
 
         new SwitchLanguagesView();
     }
@@ -74,5 +78,28 @@ class ClientController extends AbstractController
         if ($placeholder && $parent && $adminBar) $parent->replaceChild($adminBar, $placeholder);
 
         return $dom->saveHTML() ?: $html;
+    }
+
+    public function handleLanguage(): void
+    {
+        if (empty($_GET['lang'])) return;
+
+        $lang = sanitize_text_field($_GET['lang']);
+        $available_languages = get_option(Helper::LANGUAGES, []);
+
+        if (!is_array($available_languages)) $available_languages = [$available_languages];
+        if (!in_array($lang, $available_languages, true)) return;
+
+        setcookie(
+            'simplypoly_lang',
+            $lang,
+            time() + YEAR_IN_SECONDS,
+            COOKIEPATH ?: '/',
+            COOKIE_DOMAIN,
+            is_ssl(),
+            false
+        );
+
+        $_COOKIE['simplypoly_lang'] = $lang;
     }
 }

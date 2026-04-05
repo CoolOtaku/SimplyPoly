@@ -54,13 +54,21 @@ class Helper
 
     public static function getCurrentLang(): ?string
     {
-        $lang = get_query_var('lang');
+        $available_languages = get_option(self::LANGUAGES, []);
 
-        if ($lang) return sanitize_text_field($lang);
-        if (!empty($_COOKIE['simplypoly_lang'])) return sanitize_text_field($_COOKIE['simplypoly_lang']);
-        else return get_option(Helper::DEFAULT_LANGUAGE, '');
+        if (!is_array($available_languages)) $available_languages = [$available_languages];
 
-        return null;
+        if (!empty($_GET['lang'])) {
+            $lang = sanitize_text_field($_GET['lang']);
+            if (in_array($lang, $available_languages, true)) return $lang;
+        }
+
+        if (!empty($_COOKIE['simplypoly_lang'])) {
+            $lang = sanitize_text_field($_COOKIE['simplypoly_lang']);
+            if (in_array($lang, $available_languages, true)) return $lang;
+        }
+
+        return get_option(self::DEFAULT_LANGUAGE, '');
     }
 
     public static function isFrontendRequest(): bool
