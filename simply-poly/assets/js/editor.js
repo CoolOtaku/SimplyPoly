@@ -1,6 +1,6 @@
 import EditorController from './controllers/editor-controller.js';
 
-document.addEventListener('DOMContentLoaded', () => {
+jQuery(document).ready(function ($) {
     const controller = new EditorController();
     controller.init();
 });

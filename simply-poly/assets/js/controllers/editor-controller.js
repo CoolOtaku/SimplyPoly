@@ -28,27 +28,33 @@ export default class EditorController {
         try {
             const data = await this.translationService.load();
             this.store.setAll(data);
-        } catch (error) { console.error(error) }
+        } catch (error) {
+            console.error(error);
+        }
 
-        document.addEventListener('simplypoly:element:selected', (e) => {
-            const path = e.detail.path;
+        $(document).on('simplypoly:element:selected', (e) => {
+            const path = e.originalEvent.detail.path;
             const existing = this.store.getAll()[path] || {};
 
             this.store.setOriginal(path, existing);
-            this.translationPanel.show(e.detail, simplypoly.langs, this.store.getAll());
+            this.translationPanel.show(
+                e.originalEvent.detail,
+                simplypoly.langs,
+                this.store.getAll()
+            );
         });
 
-        const previewSelect = document.getElementById('simplypoly-preview-lang');
-        previewSelect.addEventListener('change', (e) => {
-            const lang = e.target.value;
+        $('#simplypoly-preview-lang').on('change', function () {
+            const lang = $(this).val();
 
-            document.dispatchEvent(new CustomEvent('simplypoly:preview:changed', { detail: { lang } }));
+            document.dispatchEvent(new CustomEvent('simplypoly:preview:changed', {detail: { lang }}));
         });
 
-        const saveBtn = document.querySelector('.save');
-        saveBtn.addEventListener('click', async () => {
+        const $saveBtn = $('.save');
+
+        $saveBtn.on('click', async () => {
             try {
-                saveBtn.disabled = true;
+                $saveBtn.prop('disabled', true);
 
                 const result = await this.translationService.save(this.store.getAll());
 
@@ -57,20 +63,18 @@ export default class EditorController {
                 this.store.reset();
             } catch (error) {
                 alert(error.message);
-                saveBtn.disabled = false;
+                $saveBtn.prop('disabled', false);
             }
         });
 
-        document.addEventListener('simplypoly:translation:changed', (e) => {
-            this.store.update(e.detail.path, e.detail.lang, e.detail.value);
+        $(document).on('simplypoly:translation:changed', (e) => {
+            const detail = e.originalEvent.detail;
 
-            saveBtn.disabled = !this.store.hasChanges(e.detail.path);
-
+            this.store.update(detail.path, detail.lang, detail.value);
+            $saveBtn.prop('disabled', !this.store.hasChanges(detail.path));
             if (this.previewTimeout) clearTimeout(this.previewTimeout);
 
-            this.previewTimeout = setTimeout(() => {
-                this.previewService.applyPreview();
-            }, 1000);
+            this.previewTimeout = setTimeout(() => this.previewService.applyPreview(), 1000);
         });
 
         this.view.onZoomChange = (zoom) => this.state.setZoom(zoom);
@@ -78,8 +82,8 @@ export default class EditorController {
         this.view.onZoomIn = () => this.zoomIn();
         this.view.onZoomOut = () => this.zoomOut();
 
-        document.getElementById('zoom-in').addEventListener('click', () => this.zoomIn());
-        document.getElementById('zoom-out').addEventListener('click', () => this.zoomOut());
+        $('#zoom-in').on('click', () => this.zoomIn());
+        $('#zoom-out').on('click', () => this.zoomOut());
     }
 
     zoomIn() {

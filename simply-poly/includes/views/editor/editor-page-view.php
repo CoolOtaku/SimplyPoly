@@ -92,7 +92,7 @@ class EditorPageView extends AbstractView
         wp_enqueue_script(
             'simply-poly-editor',
             SIMPLY_POLY_URL . 'assets/js/editor.js',
-            [],
+            ['jquery'],
             null,
             true
         );

@@ -2,7 +2,7 @@ import Helper from '../helper.js';
 
 export default class EditorFrameView {
     constructor(selector) {
-        this.frame = document.querySelector(selector);
+        this.frame = $(selector).get(0);
 
         this.iframeDoc = null;
         this.onZoomChange = null;
@@ -16,12 +16,13 @@ export default class EditorFrameView {
             return;
         }
 
-        this.frame.addEventListener('load', () => this.onWait());
+        $(this.frame).on('load', () => this.onWait());
     }
 
     onWait(attempt = 0) {
         try {
             const doc = this.frame.contentDocument || this.frame.contentWindow.document;
+
             if (doc && doc.readyState === 'complete' && doc.body) {
                 this.iframeDoc = doc;
                 this.onLoad();
@@ -38,7 +39,8 @@ export default class EditorFrameView {
     onLoad() {
         console.log('✅ Iframe fully ready');
 
-        const cssUrl = this.frame.dataset.css;
+        const cssUrl = $(this.frame).data('css');
+
         if (cssUrl) {
             const link = this.iframeDoc.createElement('link');
             link.rel = 'stylesheet';
@@ -48,25 +50,27 @@ export default class EditorFrameView {
 
         this.enableHoverEditable();
 
-        this.iframeDoc.addEventListener('wheel', (e) => {
-            if (e.ctrlKey) {
+        $(this.iframeDoc).on('wheel', (e) => {
+            const originalEvent = e.originalEvent;
+
+            if (originalEvent.ctrlKey) {
                 e.preventDefault();
 
-                if (e.deltaY < 0) if (this.onZoomIn) this.onZoomIn();
+                if (originalEvent.deltaY < 0) if (this.onZoomIn) this.onZoomIn();
                 else if (this.onZoomOut) this.onZoomOut();
 
-                this.frame.classList.add('zoom-cursor');
+                $(this.frame).addClass('zoom-cursor');
             }
-        }, { passive: false });
+        });
 
-        this.frame.classList.add('loaded');
+        $(this.frame).addClass('loaded');
     }
 
     setZoom(zoom) {
         this.frame.style.setProperty('--zoom', zoom);
 
-        if (zoom !== 1) this.frame.classList.add('zoom-cursor');
-        else this.frame.classList.remove('zoom-cursor');
+        if (zoom !== 1) $(this.frame).addClass('zoom-cursor');
+        else $(this.frame).removeClass('zoom-cursor');
 
         if (this.onZoomChange) this.onZoomChange(zoom);
     }
@@ -78,54 +82,57 @@ export default class EditorFrameView {
         }
 
         let lastHovered = null;
+
         const editableTags = [
             'p', 'span', 'strong', 'em', 'a', 'b', 'i', 'u', 'li',
             'h1', 'h2', 'h3', 'h4', 'h5', 'h6'
         ];
 
-        // HOVER
-        this.iframeDoc.addEventListener('mouseover', (e) => {
+        $(this.iframeDoc).on('mouseover', (e) => {
             const target = e.target;
 
-            if (lastHovered && lastHovered !== target) lastHovered.classList.remove('simplypoly-editable-hover');
+            if (lastHovered && lastHovered !== target) 
+                $(lastHovered).removeClass('simplypoly-editable-hover');
 
             const tag = target.tagName.toLowerCase();
+
             const hasText = target.childNodes.length === 1 &&
                 target.childNodes[0].nodeType === Node.TEXT_NODE &&
                 target.textContent.trim().length > 0;
 
             if (editableTags.includes(tag) || hasText) {
-                target.classList.add('simplypoly-editable-hover');
+                $(target).addClass('simplypoly-editable-hover');
                 lastHovered = target;
             }
         });
 
-        this.iframeDoc.addEventListener('mouseout', (e) => {
+        $(this.iframeDoc).on('mouseout', (e) => {
             if (e.target === lastHovered) {
-                e.target.classList.remove('simplypoly-editable-hover');
+                $(e.target).removeClass('simplypoly-editable-hover');
                 lastHovered = null;
             }
         });
 
-        // CLICK
-        this.iframeDoc.addEventListener('click', (e) => {
+        $(this.iframeDoc).on('click', (e) => {
             const target = e.target;
 
-            if (!target.classList.contains('simplypoly-editable-hover')) return;
+            if (!$(target).hasClass('simplypoly-editable-hover')) return;
 
             e.preventDefault();
             e.stopPropagation();
 
+            const tagName = target.tagName.toLowerCase();
+
             const payload = {
-                tag: target.tagName.toLowerCase(),
+                tag: tagName,
                 text: target.innerText || '',
                 html: target.innerHTML,
-                isImage: target.tagName.toLowerCase() === 'img',
-                src: target.tagName.toLowerCase() === 'img' ? target.src : null,
+                isImage: tagName === 'img',
+                src: tagName === 'img' ? target.src : null,
                 path: Helper.getDomPath(target)
             };
 
-            document.dispatchEvent(new CustomEvent('simplypoly:element:selected', { detail: payload }));
+            document.dispatchEvent(new CustomEvent('simplypoly:element:selected', {detail: payload}));
         });
     }
 }

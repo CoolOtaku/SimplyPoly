@@ -1,0 +1,45 @@
+.simply-poly-switcher {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.simply-poly-switcher a {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    text-decoration: none;
+}
+
+.simply-poly-switcher-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.simply-poly-switcher-toggle {
+    display: flex !important;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+.simply-poly-switcher-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: #fff;
+    border: 1px solid #ddd;
+    min-width: 180px;
+    z-index: 999;
+    padding: 5px 0;
+}
+
+.simply-poly-switcher-menu a {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    text-decoration: none;
+}

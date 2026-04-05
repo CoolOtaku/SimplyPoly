@@ -17,3 +17,24 @@ jQuery(document).ready(function ($) {
         templateSelection: formatLang
     });
 });
+
+window.copySortcode = function (button) {
+    const input = button.previousElementSibling;
+    input.select();
+    input.setSelectionRange(0, 99999);
+
+    document.execCommand('copy');
+    
+    const lang = document.documentElement.lang || 'en';
+
+    const messages = {
+        'uk': 'Скопійовано!',
+        'en': 'Copied!'
+    };
+    const copiedText = messages[lang] || messages['en'];
+
+    const originalText = button.innerText;
+    button.innerText = copiedText;
+
+    setTimeout(() => button.innerText = originalText, 1500);
+}

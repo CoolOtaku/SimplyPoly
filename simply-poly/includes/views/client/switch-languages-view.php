@@ -13,6 +13,23 @@ class SwitchLanguagesView extends AbstractView
         parent::__construct();
 
         add_shortcode('simply_poly_switcher', [$this, 'render']);
+
+        add_action('wp_enqueue_scripts', function () {
+            wp_enqueue_script(
+                'simply-poly-switcher',
+                SIMPLY_POLY_URL . 'assets/js/switcher.js',
+                ['jquery'],
+                null,
+                true
+            );
+
+            wp_enqueue_style(
+                'simply-poly-switcher',
+                SIMPLY_POLY_URL . 'assets/css/switcher.css',
+                [],
+                null
+            );
+        });
     }
 
     public function render($attrs): string
@@ -29,10 +46,10 @@ class SwitchLanguagesView extends AbstractView
         $show_names = get_option(Helper::SHOW_NAMES, 1);
 
         if ($type === 'inline') {
-            $output = '<div class="simply-poly-switcher" style="display:flex;flex-wrap:wrap;gap:10px;">';
+            $output = '<div class="simply-poly-switcher">';
 
             foreach ($langs as $lang) {
-                $output .= '<a href="?lang=' . esc_attr($lang) . '" style="display:inline-flex;align-items:center;gap:5px;text-decoration:none;">';
+                $output .= '<a href="?lang=' . esc_attr($lang) . '">';
 
                 if ($show_flags) $output .= '<img src="https://flagcdn.com/' . esc_attr($lang) . '.svg" width="16" alt="' . esc_attr($lang) . '" />';
                 if ($show_codes) $output .= '<span>' . esc_html(strtoupper($lang)) . '</span>';
@@ -56,17 +73,17 @@ class SwitchLanguagesView extends AbstractView
         if ($show_names) $current_label .= '<span>' . esc_html(Helper::$ALL_LANGUAGES[$current_lang] ?? $current_lang) . '</span>';
 
         $output = '
-        <div class="simply-poly-switcher-dropdown" style="position:relative;display:inline-block;">
-            <button type="button" class="simply-poly-switcher-toggle" style="display:flex;align-items:center;gap:6px;padding:8px 12px;cursor:pointer;">
+        <div class="simply-poly-switcher-dropdown">
+            <button type="button" class="simply-poly-switcher-toggle">
                 ' . $current_label . '
                 <span>▼</span>
             </button>
 
-            <div class="simply-poly-switcher-menu" style="display:none;position:absolute;top:100%;left:0;background:#fff;border:1px solid #ddd;min-width:180px;z-index:999;padding:5px 0;">
+            <div class="simply-poly-switcher-menu">
         ';
 
         foreach ($langs as $lang) {
-            $output .= '<a href="?lang=' . esc_attr($lang) . '" style="display:flex;align-items:center;gap:6px;padding:8px 12px;text-decoration:none;">';
+            $output .= '<a href="?lang=' . esc_attr($lang) . '">';
 
             if ($show_flags) $output .= '<img src="https://flagcdn.com/' . esc_attr($lang) . '.svg" width="16" alt="' . esc_attr($lang) . '" />';
             if ($show_codes) $output .= '<span>' . esc_html(strtoupper($lang)) . '</span>';
@@ -78,31 +95,6 @@ class SwitchLanguagesView extends AbstractView
         $output .= '
             </div>
         </div>
-
-        <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            document.querySelectorAll(".simply-poly-switcher-dropdown").forEach(function(dropdown) {
-                const button = dropdown.querySelector(".simply-poly-switcher-toggle");
-                const menu = dropdown.querySelector(".simply-poly-switcher-menu");
-
-                if (button.dataset.initialized) return;
-                button.dataset.initialized = "true";
-
-                button.addEventListener("click", function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-
-                    const isVisible = menu.style.display === "block";
-                    document.querySelectorAll(".simply-poly-switcher-menu").forEach(el => el.style.display = "none");
-                    menu.style.display = isVisible ? "none" : "block";
-                });
-            });
-
-            document.addEventListener("click", function() {
-                document.querySelectorAll(".simply-poly-switcher-menu").forEach(el => el.style.display = "none");
-            });
-        });
-        </script>
         ';
 
         return $output;

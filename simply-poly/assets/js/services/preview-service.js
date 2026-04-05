@@ -6,8 +6,8 @@ export default class PreviewService {
     }
 
     init() {
-        document.addEventListener('simplypoly:preview:changed', (e) => {
-            this.currentLang = e.detail.lang;
+        $(document).on('simplypoly:preview:changed', (e) => {
+            this.currentLang = e.originalEvent.detail.lang;
 
             if (!this.currentLang) {
                 this.resetPreview();
@@ -34,7 +34,7 @@ export default class PreviewService {
             parent.removeChild(adminBar);
         }
 
-        Object.keys(translations).forEach(path => {
+        Object.keys(translations).forEach((path) => {
             const el = doc.querySelector(path);
             if (!el) return;
 

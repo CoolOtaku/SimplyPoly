@@ -134,23 +134,6 @@ class AdminPageView extends AbstractView
                     <p class="description">
                         <?php echo esc_html__('Use dropdown or inline shortcode anywhere on the site to display the language switcher.', Helper::PLUGIN_DOMAIN); ?>
                     </p>
-
-                    <script>
-                        window.copySortcode = function(button) {
-                            const input = button.previousElementSibling;
-                            input.select();
-                            input.setSelectionRange(0, 99999);
-
-                            document.execCommand('copy');
-
-                            const originalText = button.innerText;
-                            button.innerText = 'Copied!';
-
-                            setTimeout(() => {
-                                button.innerText = originalText;
-                            }, 1500);
-                        }
-                    </script>
                 </td>
             </tr>
         </table>
