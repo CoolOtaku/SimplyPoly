@@ -36,6 +36,8 @@ class AdminPageController extends AbstractController
     {
         register_setting(Helper::LANGUAGES_GROUP, Helper::LANGUAGES);
         register_setting(Helper::LANGUAGES_GROUP, Helper::DEFAULT_LANGUAGE);
+        register_setting(Helper::LANGUAGES_GROUP, Helper::ORIGINAL_IS_DEFAULT);
+
         register_setting(Helper::LANGUAGES_GROUP, Helper::SHOW_FLAGS);
         register_setting(Helper::LANGUAGES_GROUP, Helper::SHOW_CODES);
         register_setting(Helper::LANGUAGES_GROUP, Helper::SHOW_NAMES);

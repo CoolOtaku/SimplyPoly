@@ -6,7 +6,7 @@ export default class PreviewService {
     }
 
     init() {
-        $(document).on('simplypoly:preview:changed', (e) => {
+        jQuery(document).on('simplypoly:preview:changed', (e) => {
             this.currentLang = e.originalEvent.detail.lang;
 
             if (!this.currentLang) {

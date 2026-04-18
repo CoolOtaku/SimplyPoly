@@ -9,9 +9,10 @@ class Helper
     public const PLUGIN_NAME = 'Simply Poly';
     public const PLUGIN_DOMAIN = 'simply-poly';
 
-    public const LANGUAGES_GROUP = 'simplypoly_languages_group';
     public const LANGUAGES = 'simplypoly_languages';
+    public const LANGUAGES_GROUP = 'simplypoly_languages_group';
     public const DEFAULT_LANGUAGE = 'simplypoly_default_language';
+    public const ORIGINAL_IS_DEFAULT = 'simplypoly_original_is_default';
 
     public const SHOW_FLAGS = 'simplypoly_show_flags';
     public const SHOW_CODES = 'simplypoly_show_codes';

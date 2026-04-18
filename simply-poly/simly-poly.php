@@ -12,12 +12,10 @@ License: GNU General Public License
 
 namespace SimplyPoly;
 
-use Throwable;
-
 use SimplyPoly\Helper;
-use SimplyPoly\Controllers\EditorPageController;
-use SimplyPoly\Controllers\AdminPageController;
 use SimplyPoly\Controllers\ClientController;
+use SimplyPoly\Controllers\AdminPageController;
+use SimplyPoly\Controllers\EditorPageController;
 
 if (!defined('ABSPATH')) exit;
 
@@ -27,51 +25,25 @@ class SimplyPolyPlugin
     {
         if (!defined('ABSPATH')) exit;
 
-        define('SECURITY_TOKEN_LIFETIME', 3600);
         define('SIMPLY_POLY_URL', plugin_dir_url(__FILE__));
         define('SIMPLY_POLY_PATH', plugin_dir_path(__FILE__));
-    }
 
-    public function init(): void
-    {
-        include_once SIMPLY_POLY_PATH . 'helper.php';
+        foreach (
+            [
+                '*.php',
+
+                'includes/{models,services,interfaces}/*.php',
+                'includes/views/{,admin,editor,client}/*.php',
+                'includes/controllers/{,admin,editor,client}/*.php',
+
+            ] as $path
+        ) foreach (glob(SIMPLY_POLY_PATH . $path, GLOB_BRACE) as $file) include_once $file;
+
         Helper::init();
-
-        $this->importFile('*.php');
-        $this->importFile('assets/*.php');
-
-        $this->importFile('includes/models/*.php');
-        $this->importFile('includes/services/*.php');
-        $this->importFile('includes/interfaces/*.php');
-
-        $this->importFile('includes/views/*.php');
-        $this->importFile('includes/views/admin/*.php');
-        $this->importFile('includes/views/editor/*.php');
-        $this->importFile('includes/views/client/*.php');
-
-        $this->importFile('includes/controllers/*.php');
-        $this->importFile('includes/controllers/admin/*.php');
-        $this->importFile('includes/controllers/editor/*.php');
-        $this->importFile('includes/controllers/client/*.php');
-
-        Dotenv::loadEnvFile(SIMPLY_POLY_PATH . '.env');
-
-        new EditorPageController();
-        new AdminPageController();
         new ClientController();
-    }
-
-    private function importFile(string $path): void
-    {
-        foreach (glob(SIMPLY_POLY_PATH . $path) as $file) {
-            try {
-                if (!class_exists(basename($file, '.php'))) include_once $file;
-            } catch (Throwable $e) {
-                error_log("Error loading file: {$file} - " . $e->getMessage());
-            }
-        }
+        new AdminPageController();
+        new EditorPageController();
     }
 }
 
-$simplyPolyPlugin = new SimplyPolyPlugin();
-$simplyPolyPlugin->init();
+new SimplyPolyPlugin();

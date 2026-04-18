@@ -47,6 +47,11 @@ class ClientController extends AbstractController
         $current_lang = Helper::getCurrentLang();
         if (!$current_lang) return $html;
 
+        $default_lang = get_option(Helper::DEFAULT_LANGUAGE);
+        $original_is_default = get_option(Helper::ORIGINAL_IS_DEFAULT, 1);
+
+        if ($original_is_default && $current_lang === $default_lang) return $html;
+
         libxml_use_internal_errors(true);
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $dom->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);

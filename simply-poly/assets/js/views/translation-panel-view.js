@@ -1,6 +1,6 @@
 export default class TranslationPanelView {
     constructor(selector) {
-        this.el = $(selector);
+        this.el = jQuery(selector);
         this.sourceEl = this.el.find('.simplypoly-source-text');
         this.langsEl = this.el.find('.simplypoly-languages');
         this.isOpen = false;
@@ -8,28 +8,28 @@ export default class TranslationPanelView {
         this.handleOutsideClick = this.handleOutsideClick.bind(this);
     }
 
-    show(payload, languages, translations) {
+    show(payload, languages, translations, defLang, hideDefault) {
         if (!this.el.length) return;
 
         this.el.removeClass('hidden');
         this.isOpen = true;
 
         this.renderSource(payload);
-        this.renderLanguages(payload, languages, translations);
+        this.renderLanguages(payload, languages, translations, defLang, hideDefault);
 
-        setTimeout(() => $(document).on('click', this.handleOutsideClick), 0);
+        setTimeout(() => jQuery(document).on('click', this.handleOutsideClick), 0);
     }
 
     hide() {
         this.el.addClass('hidden');
         this.isOpen = false;
 
-        $(document).off('click', this.handleOutsideClick);
+        jQuery(document).off('click', this.handleOutsideClick);
     }
 
     handleOutsideClick(e) {
         if (!this.isOpen) return;
-        if ($(e.target).closest(this.el).length) return;
+        if (jQuery(e.target).closest(this.el).length) return;
 
         this.hide();
     }
@@ -42,15 +42,17 @@ export default class TranslationPanelView {
         `);
     }
 
-    renderLanguages(payload, languages, translations) {
+    renderLanguages(payload, languages, translations, defLang, hideDefault) {
         this.langsEl.html('');
 
         const existing = translations[payload.path] || {};
 
         languages.forEach((lang) => {
+            if (hideDefault && lang === defLang) return;
+
             const savedValue = existing[lang] || '';
 
-            const $row = $(`
+            const row = jQuery(`
                 <div class="simplypoly-lang">
                     <img src="https://flagcdn.com/${lang}.svg" width="24" alt="${lang}">
                     <textarea
@@ -61,17 +63,17 @@ export default class TranslationPanelView {
                 </div>
             `);
 
-            $row.find('textarea').on('input', function () {
+            row.find('textarea').on('input', function () {
                 document.dispatchEvent(new CustomEvent('simplypoly:translation:changed', {
                     detail: {
                         path: payload.path,
                         lang: lang,
-                        value: $(this).val()
+                        value: jQuery(this).val()
                     }
                 }));
             });
 
-            this.langsEl.append($row);
+            this.langsEl.append(row);
         });
     }
 }

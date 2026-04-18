@@ -21,9 +21,10 @@ class AdminPageView extends AbstractView
             settings_fields(Helper::LANGUAGES_GROUP);
             do_settings_sections(Helper::LANGUAGES_GROUP);
 
-            $selected_values = get_option(Helper::LANGUAGES, []);
-            if (!is_array($selected_values)) $selected_values = [$selected_values];
+            $languages = get_option(Helper::LANGUAGES, []);
+            if (!is_array($languages)) $languages = [$languages];
             $default_language = get_option(Helper::DEFAULT_LANGUAGE, '');
+            $original_is_default = get_option(Helper::ORIGINAL_IS_DEFAULT, 1);
         ?>
 
         <table class="form-table">
@@ -38,7 +39,7 @@ class AdminPageView extends AbstractView
                         <?php foreach (Helper::$ALL_LANGUAGES as $key => $label): ?>
                         <option value="<?php echo esc_attr($key); ?>"
                             data-flag="https://flagcdn.com/<?php echo esc_attr($key); ?>.svg"
-                            <?php selected(in_array($key, $selected_values)); ?>>
+                            <?php selected(in_array($key, $languages)); ?>>
                             <?php echo esc_html($label); ?>
                         </option>
                         <?php endforeach; ?>
@@ -56,7 +57,7 @@ class AdminPageView extends AbstractView
                             <?php echo esc_html__('Default language', Helper::PLUGIN_DOMAIN); ?>
                         </option>
 
-                        <?php foreach ($selected_values as $key): ?>
+                        <?php foreach ($languages as $key): ?>
                         <option value="<?php echo esc_attr($key); ?>"
                             data-flag="https://flagcdn.com/<?php echo esc_attr($key); ?>.svg"
                             <?php selected($default_language ?? '', $key); ?>>
@@ -68,6 +69,13 @@ class AdminPageView extends AbstractView
                     <p class="description">
                         <?php echo esc_html__('Main site language', Helper::PLUGIN_DOMAIN); ?>
                     </p>
+
+                    <label style="display:block; margin-top:10px;">
+                        <input type="checkbox" name="<?php echo esc_attr(Helper::ORIGINAL_IS_DEFAULT); ?>" value="1"
+                            <?php checked($original_is_default, 1); ?>>
+
+                        <?php echo esc_html__('Original content is default language (no translation applied)', Helper::PLUGIN_DOMAIN); ?>
+                    </label>
                 </td>
             </tr>
 
@@ -116,7 +124,7 @@ class AdminPageView extends AbstractView
                     </label>
                     <br>
                     <input type="text" value='[simply_poly_switcher type="dropdown"]' readonly
-                        onclick="this.select(); document.execCommand('copy');"/>
+                        onclick="this.select(); document.execCommand('copy');" />
                     <button type="button" class="button" onclick="copySortcode(this);">
                         <?php echo esc_html__('Copy', Helper::PLUGIN_DOMAIN); ?>
                     </button>
@@ -126,7 +134,7 @@ class AdminPageView extends AbstractView
                     </label>
                     <br>
                     <input type="text" value='[simply_poly_switcher type="inline"]' readonly
-                        onclick="this.select(); document.execCommand('copy');"/>
+                        onclick="this.select(); document.execCommand('copy');" />
                     <button type="button" class="button" onclick="copySortcode(this);">
                         <?php echo esc_html__('Copy', Helper::PLUGIN_DOMAIN); ?>
                     </button>
@@ -144,7 +152,7 @@ class AdminPageView extends AbstractView
 <?php
         wp_enqueue_style('select2', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css');
         wp_enqueue_script('select2', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js', ['jquery']);
-        wp_enqueue_script('simply-poly-admin', SIMPLY_POLY_URL . 'assets/js/admin.js', [], null, true);
+        wp_enqueue_script('simply-poly-admin', SIMPLY_POLY_URL . 'assets/js/admin.js', ['jquery'], null, true);
 
         return true;
     }

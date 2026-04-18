@@ -2,8 +2,6 @@
 
 namespace SimplyPoly\Views;
 
-use JetBrains\PhpStorm\NoReturn;
-
 use SimplyPoly\Helper;
 
 if (!defined('ABSPATH')) exit;
@@ -20,6 +18,8 @@ class EditorPageView extends AbstractView
         $preview_url = get_permalink($post) . '?simplypoly_preview=1';
         $langs = get_option(Helper::LANGUAGES, []);
         if (!is_array($langs)) $langs = [$langs];
+        $def_lang = get_option(Helper::DEFAULT_LANGUAGE, '');
+        $original_is_default = get_option(Helper::ORIGINAL_IS_DEFAULT, 1);
 ?>
 
 <!DOCTYPE html>
@@ -101,7 +101,9 @@ class EditorPageView extends AbstractView
             'ajaxurl' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce('simplypoly_save_translation'),
             'post_id' => $post,
-            'langs' => $langs
+            'langs' => $langs,
+            'def_lang' => $def_lang,
+            'hide_def' => $original_is_default
         ]);
 
         wp_add_inline_script(

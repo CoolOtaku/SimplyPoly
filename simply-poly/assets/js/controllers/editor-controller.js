@@ -32,7 +32,7 @@ export default class EditorController {
             console.error(error);
         }
 
-        $(document).on('simplypoly:element:selected', (e) => {
+        jQuery(document).on('simplypoly:element:selected', (e) => {
             const path = e.originalEvent.detail.path;
             const existing = this.store.getAll()[path] || {};
 
@@ -40,21 +40,23 @@ export default class EditorController {
             this.translationPanel.show(
                 e.originalEvent.detail,
                 simplypoly.langs,
-                this.store.getAll()
+                this.store.getAll(),
+                simplypoly.def_lang,
+                simplypoly.hide_def
             );
         });
 
-        $('#simplypoly-preview-lang').on('change', function () {
-            const lang = $(this).val();
+        jQuery('#simplypoly-preview-lang').on('change', function () {
+            const lang = jQuery(this).val();
 
             document.dispatchEvent(new CustomEvent('simplypoly:preview:changed', {detail: { lang }}));
         });
 
-        const $saveBtn = $('.save');
+        const saveBtn = jQuery('.save');
 
-        $saveBtn.on('click', async () => {
+        saveBtn.on('click', async () => {
             try {
-                $saveBtn.prop('disabled', true);
+                saveBtn.prop('disabled', true);
 
                 const result = await this.translationService.save(this.store.getAll());
 
@@ -63,15 +65,15 @@ export default class EditorController {
                 this.store.reset();
             } catch (error) {
                 alert(error.message);
-                $saveBtn.prop('disabled', false);
+                saveBtn.prop('disabled', false);
             }
         });
 
-        $(document).on('simplypoly:translation:changed', (e) => {
+        jQuery(document).on('simplypoly:translation:changed', (e) => {
             const detail = e.originalEvent.detail;
 
             this.store.update(detail.path, detail.lang, detail.value);
-            $saveBtn.prop('disabled', !this.store.hasChanges(detail.path));
+            saveBtn.prop('disabled', !this.store.hasChanges(detail.path));
             if (this.previewTimeout) clearTimeout(this.previewTimeout);
 
             this.previewTimeout = setTimeout(() => this.previewService.applyPreview(), 1000);
@@ -82,8 +84,8 @@ export default class EditorController {
         this.view.onZoomIn = () => this.zoomIn();
         this.view.onZoomOut = () => this.zoomOut();
 
-        $('#zoom-in').on('click', () => this.zoomIn());
-        $('#zoom-out').on('click', () => this.zoomOut());
+        jQuery('#zoom-in').on('click', () => this.zoomIn());
+        jQuery('#zoom-out').on('click', () => this.zoomOut());
     }
 
     zoomIn() {
