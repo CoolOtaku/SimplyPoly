@@ -83,6 +83,7 @@ body.simplypoly-editor {
 
 /* TOOL BAR */
 .editor-toolbar {
+    position: relative !important;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2) !important;
     background: var(--widget-bg-color) !important;
     justify-content: space-between !important;
@@ -176,4 +177,73 @@ body.simplypoly-editor {
 .simplypoly-lang textarea {
     width: 100% !important;
     min-height: 80px !important;
+}
+
+/* ADAPTATION */
+/* TABLET */
+@media (max-width: 1024px) {
+
+    /* TOOL BAR */
+    .editor-toolbar:after {
+        content: "☰" !important;
+        padding: 5px 10px !important;
+        background: linear-gradient(45deg, var(--primary-color), var(--accent-color)) !important;
+        border-radius: var(--button-border-radius) !important;
+        font-size: var(--button-font-size) !important;
+        cursor: pointer !important;
+    }
+
+    .controls {
+        position: absolute !important;
+        top: 100% !important;
+        right: 0 !important;
+
+        display: flex !important;
+        flex-direction: column !important;
+        background: var(--wrapper-bg-color) !important;
+        padding: 10px !important;
+        border-radius: var(--button-border-radius) !important;
+        z-index: 100 !important;
+        gap: 10px !important;
+
+        opacity: 0 !important;
+        pointer-events: none !important;
+        transform: translateY(-10px) !important;
+        transition: 0.3s !important;
+    }
+
+    .controls * {
+        display: block !important;
+        width: 100% !important;
+    }
+
+    .editor-toolbar:hover .controls {
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        transform: translateY(0) !important;
+    }
+
+    .editor-toolbar .logo {
+        max-width: 20% !important;
+    }
+
+    #simplypoly-preview-lang {
+        margin-right: 0px !important;
+    }
+
+    /* ZOOM CONTROLS */
+    .zoom-controls,
+    .zoom-controls * {
+        display: block !important;
+    }
+
+    .zoom-controls button:first-child {
+        margin-bottom: 5px !important;
+    }
+
+    /* TRANSLATION PANEL */
+    .simplypoly-panel {
+        width: 80vw !important;
+    }
+
 }
