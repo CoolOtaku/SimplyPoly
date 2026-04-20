@@ -7,7 +7,7 @@ export default class TranslationService {
             },
             body: new URLSearchParams({
                 action: 'simplypoly_get_translations',
-                nonce: simplypoly.nonce,
+                nonce: simplypoly.nonce_get,
                 post_id: simplypoly.post_id
             })
         });
@@ -26,8 +26,8 @@ export default class TranslationService {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
             body: new URLSearchParams({
-                action: 'simplypoly_save_translation',
-                nonce: simplypoly.nonce,
+                action: 'simplypoly_post_translation',
+                nonce: simplypoly.nonce_post,
                 post_id: simplypoly.post_id,
                 translations: JSON.stringify(translations)
             })

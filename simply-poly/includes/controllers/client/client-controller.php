@@ -41,7 +41,7 @@ class ClientController extends AbstractController
         $post_id = get_the_ID();
         if (!$post_id) return $html;
 
-        $translations = $this->translationController->get(['post_id' => $post_id]);
+        $translations = $this->translationController->getByPostId(['post_id' => $post_id]);
         if (empty($translations)) return $html;
 
         $current_lang = Helper::getCurrentLang();

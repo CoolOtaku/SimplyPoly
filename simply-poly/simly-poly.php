@@ -44,6 +44,19 @@ class SimplyPolyPlugin
         new AdminPageController();
         new EditorPageController();
     }
+
+    public function activateRoutes(): void
+    {
+        flush_rewrite_rules();
+    }
+
+    public function deactivateRoutes(): void
+    {
+        flush_rewrite_rules();
+    }
 }
 
-new SimplyPolyPlugin();
+$simplyPolyPlugin = new SimplyPolyPlugin();
+
+register_activation_hook(__FILE__, [$simplyPolyPlugin, 'activateRoutes']);
+register_deactivation_hook(__FILE__, [$simplyPolyPlugin, 'deactivateRoutes']);

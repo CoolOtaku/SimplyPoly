@@ -17,32 +17,18 @@ class EditorPageController extends AbstractController implements UpdatableDeleta
     {
         parent::__construct();
 
+        $this->translationController = new TranslationController();
+        add_action('wp_ajax_simplypoly_get_translations', [$this, 'get']);
+        add_action('wp_ajax_simplypoly_post_translation', [$this, 'post']);
+
         add_action('admin_action_simplypoly', [new EditorPageView(), 'render']);
         add_filter('page_row_actions', [$this, 'addButtonForPage'], 10, 2);
         add_action('admin_bar_menu', [$this, 'addButtonForAdminBar'], 100);
-
-        $this->translationController = new TranslationController();
-        add_action('wp_ajax_simplypoly_get_translations', [$this, 'get']);
-        add_action('wp_ajax_simplypoly_save_translation', [$this, 'post']);
     }
 
-    public function get($attrs = null): bool
+    public function get($attrs = null): mixed
     {
-        if (
-            empty($_POST) ||
-            !isset($_POST['nonce']) ||
-            !wp_verify_nonce($_POST['nonce'], 'simplypoly_save_translation') ||
-            !current_user_can('edit_pages')
-        ) {
-            wp_send_json_error([
-                'message' => __('Security check failed', Helper::PLUGIN_DOMAIN)
-            ], 403);
-        }
-
-        $data = $this->translationController->get();
-        wp_send_json_success(['data' => $data]);
-
-        return true;
+        return wp_send_json_success(['data' => $this->translationController->get()]);
     }
 
     public function post($attrs = null): bool
@@ -87,12 +73,10 @@ class EditorPageController extends AbstractController implements UpdatableDeleta
         $url = admin_url('post.php?post=' . $post_id . '&action=simplypoly');
 
         $wp_admin_bar->add_node([
-            'id'    => 'simplypoly_translate',
+            'id' => 'simplypoly_translate',
             'title' => '🌐 ' . __('Translate', Helper::PLUGIN_DOMAIN),
-            'href'  => esc_url($url),
-            'meta'  => [
-                'class' => 'simplypoly-adminbar-button'
-            ]
+            'href' => esc_url($url),
+            'meta' => ['class' => 'simplypoly-adminbar-button']
         ]);
     }
 }

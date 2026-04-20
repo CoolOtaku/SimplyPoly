@@ -99,7 +99,8 @@ class EditorPageView extends AbstractView
 
         wp_localize_script('simply-poly-editor', 'simplypoly', [
             'ajaxurl' => admin_url('admin-ajax.php'),
-            'nonce' => wp_create_nonce('simplypoly_save_translation'),
+            'nonce_get' => wp_create_nonce('simplypoly_get_translation'),
+            'nonce_post' => wp_create_nonce('simplypoly_post_translation'),
             'post_id' => $post,
             'langs' => $langs,
             'def_lang' => $def_lang,
