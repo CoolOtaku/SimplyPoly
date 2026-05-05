@@ -49,7 +49,7 @@ class SwitchLanguagesView extends AbstractView
             $output = '<div class="simply-poly-switcher">';
 
             foreach ($langs as $lang) {
-                $output .= '<a href="?lang=' . esc_attr($lang) . '">';
+                $output .= '<a href="' . esc_url($this->buildLangUrl($lang)) . '">';
 
                 if ($show_flags) $output .= '<img src="https://flagcdn.com/' . esc_attr($lang) . '.svg" width="16" alt="' . esc_attr($lang) . '" />';
                 if ($show_codes) $output .= '<span>' . esc_html(strtoupper($lang)) . '</span>';
@@ -83,7 +83,7 @@ class SwitchLanguagesView extends AbstractView
         ';
 
         foreach ($langs as $lang) {
-            $output .= '<a href="?lang=' . esc_attr($lang) . '">';
+            $output .= '<a href="' . esc_url($this->buildLangUrl($lang)) . '">';
 
             if ($show_flags) $output .= '<img src="https://flagcdn.com/' . esc_attr($lang) . '.svg" width="16" alt="' . esc_attr($lang) . '" />';
             if ($show_codes) $output .= '<span>' . esc_html(strtoupper($lang)) . '</span>';
@@ -98,5 +98,18 @@ class SwitchLanguagesView extends AbstractView
         ';
 
         return $output;
+    }
+
+    private function buildLangUrl(string $lang): string
+    {
+        $current_url = home_url(add_query_arg(null, null));
+
+        $url_parts = wp_parse_url($current_url);
+        $path = $url_parts['path'] ?? '';
+
+        $query = $_GET;
+        $query['lang'] = $lang;
+
+        return home_url($path . '?' . http_build_query($query));
     }
 }

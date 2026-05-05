@@ -25,17 +25,6 @@ class Helper
         self::$ALL_LANGUAGES = json_decode(file_get_contents(SIMPLY_POLY_PATH . 'all-languages.json'), true);
     }
 
-    public static function getUserIp(): string
-    {
-        if (!empty($_SERVER['HTTP_CLIENT_IP'])) return $_SERVER['HTTP_CLIENT_IP'];
-        elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            $ip_list = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
-            return trim($ip_list[0]);
-        } elseif (!empty($_SERVER['REMOTE_ADDR'])) return $_SERVER['REMOTE_ADDR'];
-
-        return 'UNKNOWN';
-    }
-
     public static function cssToXpath($css)
     {
         $parts = explode(' > ', trim($css));
@@ -55,21 +44,20 @@ class Helper
 
     public static function getCurrentLang(): ?string
     {
-        $available_languages = get_option(self::LANGUAGES, []);
-
-        if (!is_array($available_languages)) $available_languages = [$available_languages];
+        $langs = get_option(self::LANGUAGES, []);
+        if (!is_array($langs)) $langs = [$langs];
 
         if (!empty($_GET['lang'])) {
             $lang = sanitize_text_field($_GET['lang']);
-            if (in_array($lang, $available_languages, true)) return $lang;
+            if (in_array($lang, $langs, true)) return $lang;
         }
 
         if (!empty($_COOKIE['simplypoly_lang'])) {
-            $lang = sanitize_text_field($_COOKIE['simplypoly_lang']);
-            if (in_array($lang, $available_languages, true)) return $lang;
+            $cookie = sanitize_text_field($_COOKIE['simplypoly_lang']);
+            if (in_array($cookie, $langs, true)) return $cookie;
         }
 
-        return get_option(self::DEFAULT_LANGUAGE, '');
+        return get_option(self::DEFAULT_LANGUAGE);
     }
 
     public static function isFrontendRequest(): bool

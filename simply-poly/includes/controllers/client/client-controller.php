@@ -90,10 +90,10 @@ class ClientController extends AbstractController
         if (empty($_GET['lang'])) return;
 
         $lang = sanitize_text_field($_GET['lang']);
-        $available_languages = get_option(Helper::LANGUAGES, []);
-
-        if (!is_array($available_languages)) $available_languages = [$available_languages];
-        if (!in_array($lang, $available_languages, true)) return;
+        $langs = get_option(Helper::LANGUAGES, []);
+        
+        if (!is_array($langs)) $langs = [$langs];
+        if (!in_array($lang, $langs, true)) return;
 
         setcookie(
             'simplypoly_lang',
