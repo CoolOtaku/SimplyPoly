@@ -1,0 +1,101 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: SimplyPoly\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-23 11:09+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: \n"
+"Language-Team: Українська\n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.8.1; wp-6.9; php-8.2.28\n"
+"X-Domain: simply-poly"
+
+#. Description of the plugin
+msgid ""
+"A lightweight multilingual plugin for WordPress that manages translations "
+"inside a single page using a visual translation builder."
+msgstr ""
+
+#: includes/views/admin/admin-page-view.php:29
+msgid "Languages for translation"
+msgstr ""
+
+#: includes/views/admin/admin-page-view.php:39
+msgid "Select one or more languages for translation (Ctrl/Command + click)"
+msgstr ""
+
+#: includes/controllers/admin/admin-page-controller.php:30
+msgid "Simply Poly Settings"
+msgstr ""
+
+#: includes/controllers/editor/editor-page-controller.php:39
+msgid "Translate"
+msgstr ""
+
+msgid "Translations saved successfully!"
+msgstr ""
+
+msgid "Default language"
+msgstr ""
+
+msgid "Main site language"
+msgstr ""
+
+msgid "Original content is default language (no translation applied)"
+msgstr ""
+
+msgid "Switcher display settings"
+msgstr ""
+
+msgid "Show flags"
+msgstr ""
+
+msgid "Show language codes (UA, EN...)"
+msgstr ""
+
+msgid "Show language names"
+msgstr ""
+
+msgid "Control how language switcher is displayed"
+msgstr ""
+
+msgid "Dropdown switcher"
+msgstr ""
+
+msgid "Copy"
+msgstr ""
+
+msgid "Inline switcher"
+msgstr ""
+
+msgid ""
+"Use dropdown or inline shortcode anywhere on the site to display the "
+"language switcher."
+msgstr ""
+
+msgid "Access denied!"
+msgstr ""
+
+msgid "No post ID provided!"
+msgstr ""
+
+msgid "Simply Poly Editor"
+msgstr ""
+
+msgid "Preview: Off"
+msgstr ""
+
+msgid "Save"
+msgstr ""
+
+msgid "Refresh"
+msgstr ""
+
+msgid "Exit"
+msgstr ""

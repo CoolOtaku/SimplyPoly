@@ -27,7 +27,7 @@ class EditorPageView extends AbstractView
 
 <head>
     <meta charset="<?php bloginfo('charset'); ?>">
-    <title><?php echo esc_html__('SimplyPoly Editor', Helper::PLUGIN_DOMAIN); ?></title>
+    <title><?php echo esc_html__('Simply Poly Editor', Helper::PLUGIN_DOMAIN); ?></title>
 
     <?php
         remove_action('wp_footer', 'wp_admin_bar_render', 1000);
